@@ -1,0 +1,54 @@
+
+.ios-logo-in {
+  animation: ios-logo-in 0.5s ease-out both;
+}
+
+.ios-fill {
+  animation: ios-fill 3.2s ease-out both;
+}
+
+.ios-wake-in {
+  animation: ios-wake-in 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+
+@keyframes ios-logo-in {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+
+@keyframes ios-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+
+@keyframes ios-wake-in {
+  from {
+    opacity: 0;
+    transform: scale(1.06);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ios-logo-in,
+  .ios-fill,
+  .ios-wake-in {
+    animation: none;
+  }
+}

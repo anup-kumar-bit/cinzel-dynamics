@@ -1,0 +1,40 @@
+/* Wallpaper and widget fills for the IOS-HomeScreen mock, kept beside the
+   component so each Mock-UI component owns its own CSS. */
+
+/* Stacked radial washes over a deep diagonal base. That layering is what gives
+   recent iPhone default wallpapers their depth — colour pooling in the corners
+   rather than a flat two-stop ramp — and it needs no image to ship. Palette
+   matches Apple's stock blue default wallpaper: navy base, royal-blue mid,
+   sky-blue glare pooling top-right. */
+.ios-home-wallpaper {
+  background:
+    radial-gradient(120% 80% at 80% 6%, rgba(147, 210, 255, 0.55) 0%, transparent 55%),
+    radial-gradient(110% 70% at 8% 22%, rgba(37, 99, 235, 0.55) 0%, transparent 60%),
+    radial-gradient(130% 85% at 52% 104%, rgba(8, 47, 115, 0.6) 0%, transparent 62%),
+    linear-gradient(158deg, #01102b 0%, #0a2f6e 46%, #1f6fd6 100%);
+}
+
+.ios-home-weather {
+  background: linear-gradient(180deg, #52a3e8 0%, #2c6dc2 100%);
+}
+
+/* Warm paper tone Apple Maps uses for land */
+.ios-home-map {
+  background: #ece7de;
+}
+
+/* App tiles. Apple's icons run a vertical light-to-dark ramp in the app's own
+   hue, not a diagonal wash of a generic palette colour — matching the real
+   gradients is what makes a tile read as that app at thumbnail size. */
+.ios-tile-phone {
+  background: linear-gradient(180deg, #61e475 0%, #12ce38 100%);
+}
+
+/* Safari and Settings render their own real icon image edge-to-edge, so they
+   carry no tile fill of their own — see IOS-HomeScreen.jsx. Photos does the
+   same but keeps a near-white backing tile, since the real Photos icon sits
+   its pinwheel on a white square rather than filling the tile itself. */
+.ios-tile-photos {
+  background: linear-gradient(180deg, #ffffff 0%, #eceef2 100%);
+}
+

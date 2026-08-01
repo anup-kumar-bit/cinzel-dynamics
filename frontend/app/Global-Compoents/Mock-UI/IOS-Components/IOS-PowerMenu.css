@@ -1,0 +1,34 @@
+.ios-sheet-backdrop-in {
+  animation: ios-sheet-fade-in 0.2s ease-out both;
+}
+
+.ios-sheet-panel-in {
+  animation: ios-sheet-drop-in 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes ios-sheet-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ios-sheet-drop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ios-sheet-backdrop-in,
+  .ios-sheet-panel-in {
+    animation: none;
+  }
+}
