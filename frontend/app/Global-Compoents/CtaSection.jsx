@@ -22,7 +22,7 @@ export default function CtaSection() {
         </p>
 
         <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <a href="#" className="btn btn-neutral rounded-full px-6">
+          <a href="#contact" className="btn btn-neutral rounded-full px-6">
             Book a Free Consultation
           </a>
           <Link href="/#services" className="btn btn-ghost rounded-full px-6">

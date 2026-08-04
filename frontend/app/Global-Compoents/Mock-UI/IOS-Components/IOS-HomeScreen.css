@@ -38,3 +38,36 @@
   background: linear-gradient(180deg, #ffffff 0%, #eceef2 100%);
 }
 
+/* Home-screen grid tiles, same vertical ramp rule as the dock above. */
+.ios-tile-messages {
+  background: linear-gradient(180deg, #5df07a 0%, #0ec93a 100%);
+}
+
+.ios-tile-mail {
+  background: linear-gradient(180deg, #40b6ff 0%, #087cf6 100%);
+}
+
+.ios-tile-calendar {
+  background: linear-gradient(180deg, #ffffff 0%, #f1f2f5 100%);
+}
+
+.ios-tile-camera {
+  background: linear-gradient(180deg, #d9dade 0%, #a8aab0 100%);
+}
+
+.ios-tile-clock {
+  background: linear-gradient(180deg, #2c2c31 0%, #08080a 100%);
+}
+
+.ios-tile-notes {
+  background: linear-gradient(180deg, #ffe58f 0%, #ffc83c 100%);
+}
+
+.ios-tile-music {
+  background: linear-gradient(180deg, #fb6d76 0%, #f43b52 100%);
+}
+
+.ios-tile-appstore {
+  background: linear-gradient(180deg, #3ba0ff 0%, #1b6df0 100%);
+}
+

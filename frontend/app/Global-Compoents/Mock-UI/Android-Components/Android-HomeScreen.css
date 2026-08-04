@@ -1,0 +1,35 @@
+/* Wallpaper and tile fills for the Android home screen, kept beside the
+   component the same way the iOS mock keeps its own. */
+
+/* Material You leans on a few large colour pools over a dark base rather than
+   iOS's single diagonal ramp — greens and violets bleeding into a deep teal. */
+.android-home-wallpaper {
+  background:
+    radial-gradient(115% 75% at 14% 6%, rgba(112, 222, 176, 0.5) 0%, transparent 55%),
+    radial-gradient(105% 70% at 88% 22%, rgba(150, 138, 255, 0.45) 0%, transparent 60%),
+    radial-gradient(130% 85% at 52% 104%, rgba(9, 38, 52, 0.7) 0%, transparent 64%),
+    linear-gradient(162deg, #0a1f1c 0%, #173947 46%, #33285f 100%);
+}
+
+/* Tiles for the apps that have no brand mark of their own. Android icons read
+   as flat circles of one hue, not the vertical ramp Apple uses. */
+.android-tile-phone {
+  background: #34a853;
+}
+
+.android-tile-messages {
+  background: #1a73e8;
+}
+
+.android-tile-camera {
+  background: #202124;
+}
+
+.android-tile-settings {
+  background: #5f6368;
+}
+
+/* Brand marks ship their own colour, so they sit on a plain light disc. */
+.android-tile-brand {
+  background: #f8f9fa;
+}

@@ -27,7 +27,7 @@ export default function TrustSection() {
           ))}
         </div>
 
-        <a href="#" className="btn btn-neutral mt-10 rounded-full px-6">
+        <a href="#contact" className="btn btn-neutral mt-10 rounded-full px-6">
           Book a Free Consultation
         </a>
 

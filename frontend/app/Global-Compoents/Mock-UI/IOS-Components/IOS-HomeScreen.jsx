@@ -3,10 +3,33 @@
 import Image from 'next/image'
 import React, { useState } from 'react'
 
+import IosAppInteraction from './IOS-App-Interaction'
 import IosDialer from './IOS-Dialer'
 import IosPowerMenu from './IOS-PowerMenu'
 import './IOS-HomeScreen.css'
 
+// Stand-in shots until real captures land: keys are screens in walk order, each
+// array is that screen top to bottom. Swap this for the object you receive.
+const DEMO_APP_SCREENS = {
+  Feed: ['https://picsum.photos/seed/cinzel-feed-a/420/910', 'https://picsum.photos/seed/cinzel-feed-b/420/910'],
+  Detail: ['https://picsum.photos/seed/cinzel-detail-a/420/910', 'https://picsum.photos/seed/cinzel-detail-b/420/910'],
+  Checkout: ['https://picsum.photos/seed/cinzel-checkout/420/910'],
+}
+
+
+
+const HOME_APPS = [
+  { icon: 'icon-[lucide--message-circle]', label: 'Messages', tone: 'ios-tile-messages' },
+  { icon: 'icon-[lucide--mail]', label: 'Mail', tone: 'ios-tile-mail' },
+  { icon: 'icon-[lucide--calendar]', label: 'Calendar', tone: 'ios-tile-calendar', glyph: 'text-red-500' },
+  { icon: 'icon-[lucide--camera]', label: 'Camera', tone: 'ios-tile-camera', glyph: 'text-neutral-700' },
+  { icon: 'icon-[lucide--clock]', label: 'Clock', tone: 'ios-tile-clock' },
+  { icon: 'icon-[lucide--notebook-pen]', label: 'Notes', tone: 'ios-tile-notes', glyph: 'text-neutral-700' },
+  { icon: 'icon-[lucide--music]', label: 'Music', tone: 'ios-tile-music' },
+  { icon: 'icon-[lucide--shopping-bag]', label: 'App Store', tone: 'ios-tile-appstore' },
+]
+
+const APP_COLUMNS = 4
 
 const DOCK = [
   { icon: 'icon-[ion--call]', label: 'Phone', tone: 'ios-tile-phone', action: 'dialer' },
@@ -18,6 +41,7 @@ const DOCK = [
 export default function IosHomeScreen({ className = '', onPowerOff }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const [dialerOpen, setDialerOpen] = useState(false)
+  const [openApp, setOpenApp] = useState(null)
 
   const OPEN_HANDLERS = {
     'power-menu': () => setMenuOpen(true),
@@ -39,6 +63,20 @@ export default function IosHomeScreen({ className = '', onPowerOff }) {
     )
   }
 
+  // Every grid app opens the same walkthrough for now. Give an entry in
+  // HOME_APPS its own `screens` object and it takes over from the demo set.
+  if (openApp) {
+    return (
+      <div className={`absolute inset-0 ${className}`}>
+        <IosAppInteraction
+          title={openApp.label}
+          images={openApp.screens ?? DEMO_APP_SCREENS}
+          onClose={() => setOpenApp(null)}
+        />
+      </div>
+    )
+  }
+
   return (
     <div className={`ios-home-wallpaper absolute inset-0 flex flex-col ${className}`}>
       <StatusBar />
@@ -47,6 +85,8 @@ export default function IosHomeScreen({ className = '', onPowerOff }) {
         <WeatherWidget />
         <MapWidget />
       </div>
+
+      <AppGrid apps={HOME_APPS} onOpen={setOpenApp} />
 
       {/* Search pill */}
       <div className="mt-auto flex justify-center pb-2">
@@ -77,6 +117,32 @@ export default function IosHomeScreen({ className = '', onPowerOff }) {
       <span className="absolute bottom-[1%] left-1/2 h-[0.55%] w-[36%] -translate-x-1/2 rounded-full bg-white/80" />
 
       {menuOpen && <IosPowerMenu onSelect={handleSelect} onClose={() => setMenuOpen(false)} />}
+    </div>
+  )
+}
+
+function AppGrid({ apps, columns = APP_COLUMNS, onOpen }) {
+  const rows = []
+  for (let index = 0; index < apps.length; index += columns) {
+    rows.push(apps.slice(index, index + columns))
+  }
+
+  return (
+    <div className="mx-4 my-3 flex min-h-0 flex-1 flex-col-reverse gap-2.5">
+      {rows.map((row) => (
+        <div key={row[0].label} className="grid grid-cols-4 gap-2.5">
+          {row.map((app) => (
+            <AppTile
+              key={app.label}
+              icon={app.icon}
+              label={app.label}
+              tone={app.tone}
+              glyph={app.glyph}
+              onClick={() => onOpen?.(app)}
+            />
+          ))}
+        </div>
+      ))}
     </div>
   )
 }

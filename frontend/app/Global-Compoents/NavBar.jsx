@@ -4,7 +4,7 @@ import Link from 'next/link'
 // Hrefs are rooted at `/` so a section link still works from the portfolio
 // route — a bare `#services` would do nothing on any page but the landing one.
 const navLinks = [
-  { label: 'Services', href: '/#services' },
+  { label: 'Services', href: '/services' },
   { label: 'Portfolio', href: '/portfolio' },
   { label: 'Process', href: '/#process' },
   { label: 'Trust', href: '/#trust' },
@@ -49,7 +49,7 @@ export default function NavBar() {
       </div>
 
       <div className="navbar-end">
-        <a href="#" className="btn btn-neutral btn-sm sm:btn-md rounded-full px-4 sm:px-5">
+        <a href="#contact" className="btn btn-neutral btn-sm sm:btn-md rounded-full px-4 sm:px-5">
           Book a Demo
         </a>
       </div>

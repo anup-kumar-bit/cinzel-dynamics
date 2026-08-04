@@ -1,0 +1,69 @@
+/* Shot transitions for the Android walkthrough. Same two directions as the iOS
+   one — scrolling pushes the next image up, moving screens slides it in from
+   the right — kept under their own names so each component owns its CSS. */
+
+.android-app-shot-in {
+  animation: android-app-shot-in 0.4s ease-out both;
+}
+
+.android-app-shot-up {
+  animation: android-app-shot-up 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.android-app-shot-left {
+  animation: android-app-shot-left 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.android-app-nudge {
+  animation: android-app-nudge 1.8s ease-in-out infinite;
+}
+
+@keyframes android-app-shot-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes android-app-shot-up {
+  from {
+    opacity: 0.35;
+    transform: translateY(22%);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes android-app-shot-left {
+  from {
+    opacity: 0;
+    transform: translateX(26%);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes android-app-nudge {
+  0%,
+  100% {
+    transform: translateY(-1px);
+  }
+  50% {
+    transform: translateY(2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .android-app-shot-in,
+  .android-app-shot-up,
+  .android-app-shot-left,
+  .android-app-nudge {
+    animation: none;
+  }
+}

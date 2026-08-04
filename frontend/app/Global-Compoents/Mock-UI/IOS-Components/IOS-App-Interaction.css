@@ -1,0 +1,71 @@
+/* Shot transitions for the app-interaction screen. Which one plays is decided
+   by how the shot was reached: scrolling down inside a screen pushes the next
+   image up, moving to the next screen slides it in from the right. */
+
+.ios-app-shot-in {
+  animation: ios-app-shot-in 0.4s ease-out both;
+}
+
+.ios-app-shot-up {
+  animation: ios-app-shot-up 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.ios-app-shot-left {
+  animation: ios-app-shot-left 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+/* Small drift on the scroll chevron so the control reads as an invitation
+   rather than decoration. */
+.ios-app-nudge {
+  animation: ios-app-nudge 1.8s ease-in-out infinite;
+}
+
+@keyframes ios-app-shot-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ios-app-shot-up {
+  from {
+    opacity: 0.35;
+    transform: translateY(22%);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes ios-app-shot-left {
+  from {
+    opacity: 0;
+    transform: translateX(26%);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes ios-app-nudge {
+  0%,
+  100% {
+    transform: translateY(-1px);
+  }
+  50% {
+    transform: translateY(2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ios-app-shot-in,
+  .ios-app-shot-up,
+  .ios-app-shot-left,
+  .ios-app-nudge {
+    animation: none;
+  }
+}

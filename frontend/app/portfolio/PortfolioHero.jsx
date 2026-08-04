@@ -7,7 +7,6 @@ const STATS = [
   { value: '12', label: 'Countries shipped to' },
 ]
 
-// -------** PortfolioHero **---------
 export default function PortfolioHero() {
   return (
     <section id="top" className="relative isolate overflow-hidden px-4 pt-16 pb-4 sm:px-8 sm:pt-20 lg:px-16">
@@ -40,7 +39,6 @@ export default function PortfolioHero() {
   )
 }
 
-// ---------- Decorative backdrop ----------
 function HeroBackdrop() {
   return (
     <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">

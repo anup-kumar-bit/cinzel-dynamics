@@ -1,5 +1,6 @@
 import { Geist_Mono, Cinzel,Open_Sans } from "next/font/google";
 import NavBar from "./Global-Compoents/NavBar";
+import ContactPopup from "./Global-Compoents/ContactPopup";
 import FaqSection from "./Global-Compoents/FaqSection";
 import CtaSection from "./Global-Compoents/CtaSection";
 import Footer from "./Global-Compoents/Footer";
@@ -104,6 +105,7 @@ export default function RootLayout({ children }) {
           <CtaSection/>
         </main>
         <Footer/>
+        <ContactPopup/>
       </body>
     </html>
   );
