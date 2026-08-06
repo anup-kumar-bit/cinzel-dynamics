@@ -1,8 +1,6 @@
 import { Geist_Mono, Cinzel,Open_Sans } from "next/font/google";
 import NavBar from "./Global-Compoents/NavBar";
 import ContactPopup from "./Global-Compoents/ContactPopup";
-import CtaSection from "./Global-Compoents/CtaSection";
-import Footer from "./Global-Compoents/Footer";
 import "./globals.css";
 
 const geistMono = Geist_Mono({
@@ -100,9 +98,7 @@ export default function RootLayout({ children }) {
         <NavBar/>
         <main className="flex-1">
           {children}
-          <CtaSection/>
         </main>
-        <Footer/>
         <ContactPopup/>
       </body>
     </html>

@@ -2,6 +2,8 @@ import TrustHero from "./TrustHero";
 import TrustCharter from "./TrustCharter";
 import TrustContact from "./TrustContact";
 import FaqSection from "../Global-Compoents/FaqSection";
+import CtaSection from "../Global-Compoents/CtaSection";
+import Footer from "../Global-Compoents/Footer";
 
 const SITE_URL = "https://cinzeldynamics.com";
 
@@ -40,6 +42,8 @@ export default function TrustPage() {
       <TrustHero />
       <TrustCharter />
       <TrustContact />
-      <FaqSection /></>
+      <FaqSection />
+      <CtaSection />
+      <Footer /></>
   );
 }

@@ -8,6 +8,8 @@ import SeoSection from "./Landing-Page/SeoSection";
 import AiAutomationSection from "./Landing-Page/AiAutomationSection";
 import DigitalMarketingSection from "./Landing-Page/DigitalMarketingSection";
 import ClientWorkCorridor from "./Landing-Page/ClientWorkCorridor";
+import CtaSection from "./Global-Compoents/CtaSection";
+import Footer from "./Global-Compoents/Footer";
 
 const SITE_URL = "https://cinzeldynamics.com";
 
@@ -67,9 +69,10 @@ export default function Home() {
       <PortfolioTeaser />
       <SeoSection />
       <AiAutomationSection />
-       <PortfolioTeaser />
+      <PortfolioTeaser />
       <DigitalMarketingSection />
       <ClientWorkCorridor />
-    </>
+      <CtaSection />
+      <Footer /></>
   );
 }

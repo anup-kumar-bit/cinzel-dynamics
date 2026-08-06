@@ -1,5 +1,7 @@
 import PortfolioHero from "./PortfolioHero";
 import ProjectGrid from "./ProjectGrid";
+import CtaSection from "../Global-Compoents/CtaSection";
+import Footer from "../Global-Compoents/Footer";
 
 export const metadata = {
   title: "Portfolio",
@@ -14,5 +16,7 @@ export default function PortfolioPage() {
   return <>
     <PortfolioHero />
     <ProjectGrid />
+    <CtaSection />
+    <Footer />
   </>;
 }
