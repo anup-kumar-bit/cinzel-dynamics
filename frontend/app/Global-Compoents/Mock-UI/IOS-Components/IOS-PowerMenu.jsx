@@ -1,8 +1,7 @@
 import React from 'react'
 import './IOS-PowerMenu.css'
 
-// Rows shown in the sheet. Power Off is the only one today — new rows (Wi-Fi,
-// Airplane Mode, ...) slot in here later without touching the layout below.
+// Power Off is the only row today — more (Wi-Fi, Airplane Mode) can slot in later.
 const ACTIONS = [{ key: 'power-off', label: 'Power Off', icon: 'icon-[lucide--power]' }]
 
 export default function IosPowerMenu({ onSelect, onClose }) {

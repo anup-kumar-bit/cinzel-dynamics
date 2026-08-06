@@ -1,27 +1,23 @@
 import React from 'react'
 
-import { Scene } from './ServiceScenes'
+import { Scene, inkOf } from './ServiceScenes'
 
-// Fifteen jobs stated as the result the customer wants. Every entry carries the
-// plain-language write-up, the platforms it ships on, and the web address a
-// customer would land on — null where the thing is an internal tool.
+// Fifteen jobs stated as the result the customer wants, each with a plain write-up and its platforms.
 const SERVICES = [
   {
     id: 'whatsapp',
     eyebrow: 'WhatsApp automation',
-    title: 'Run the whole shop from one WhatsApp thread',
+    title: 'Run your whole shop in one WhatsApp chat',
     icon: 'icon-[logos--whatsapp-icon]',
-    intro: 'Your customers already have WhatsApp open. This puts the shop inside it.',
+    intro: 'People already have WhatsApp open. Now your shop lives there too.',
     platforms: ['web'],
     scene: 'chat',
-    site: 'order.yourshop.com',
-    accent: 'from-emerald-100 via-teal-100 to-green-50',
-    tint: 'from-emerald-400 to-teal-500',
-    float: { title: 'One thread, start to finish', copy: 'Ask, order, pay and get confirmed without leaving the chat.' },
-    stat: { value: '24/7', label: 'Always answering', copy: 'Replies land in seconds at 2am, on a Sunday, and in your busiest hour.' },
+    ink: 'emerald',
+    float: { title: 'One chat, start to finish', copy: 'Ask, order, pay, and get confirmed — all without leaving the chat.' },
+    stat: { value: '24/7', label: 'Always answering', copy: 'It replies fast, day or night, even on a busy Sunday.' },
     summaryTitle: 'How it works in plain terms',
     description:
-      'People message the same number you already give out. The moment they do, they get an answer — what you sell, what is in stock, what it costs. If they want something, it takes the order in the chat, sends a payment link, and confirms the second the money lands. It remembers what someone bought last time, so a repeat order takes one line from them. Appointment reminders and follow-ups go out on their own. Nothing important is left to a machine: if a question is unusual, a refund is large, or someone sounds upset, the chat moves to your team with the whole history attached, so nobody has to ask the customer to explain again.',
+      'People message the same number you already use. The moment they write, they get an answer — what you sell, what you have, and how much it costs. If they want to buy something, they order right there, get a link to pay, and see it confirmed the second they pay. It remembers what someone bought last time, so their next order takes just one line. It also sends reminders on its own. But if something is tricky — a big refund, an angry customer, an unusual question — it hands the chat to your team, with the whole story attached, so nobody has to explain themselves twice.',
     chips: [
       { icon: 'icon-[lucide--message-square]', label: 'Takes orders' },
       { icon: 'icon-[lucide--credit-card]', label: 'Sends payment' },
@@ -32,19 +28,17 @@ const SERVICES = [
   {
     id: 'health',
     eyebrow: 'Healthcare',
-    title: 'A health app that knows the person holding it',
+    title: 'A health app that knows the person using it',
     icon: 'icon-[lucide--heart-pulse]',
-    intro: 'Readings go in, a plan that actually changes comes out.',
+    intro: 'You log a reading, and it gives you a plan that actually changes.',
     platforms: ['ios', 'android', 'web'],
-    scene: 'duo',
-    site: 'care.yourclinic.com',
-    accent: 'from-rose-100 via-pink-100 to-orange-50',
-    tint: 'from-rose-400 to-pink-500',
-    float: { title: 'Built around one patient', copy: 'The plan moves when their numbers move, not at the next appointment.' },
-    stat: { value: '3×', label: 'More check-ins', copy: 'People log more when logging takes one tap instead of a paper diary.' },
+    scene: 'vitals',
+    ink: 'rose',
+    float: { title: 'Made for one person — you', copy: 'Your plan changes when your numbers change, not just at your next visit.' },
+    stat: { value: '3×', label: 'More check-ins', copy: 'People log more when it takes one tap, not a paper diary.' },
     summaryTitle: 'How it works in plain terms',
     description:
-      'The patient opens the app and sees what to do today — take this reading, walk this far, drink this much. Their watch or blood-pressure cuff sends numbers straight in, so there is nothing to type. When the numbers drift, the plan adjusts and they get told why in language they understand, not a chart they have to decode. Anything that looks wrong raises a flag with the clinic instead of sitting in the app unread. Your doctors get a web dashboard on the other side with a one-page summary per patient: what changed, what was missed, what needs a call. Records go in and out in the formats hospitals already use, so nobody retypes anything.',
+      'You open the app and see what to do today — take this reading, walk this far, drink this much water. Your watch or blood-pressure cuff sends the numbers in by itself, so there is nothing to type. When your numbers change, your plan changes too, and it tells you why in simple words, not a chart you have to figure out. If something looks wrong, it tells your clinic right away instead of just sitting there. Your doctor gets a simple one-page summary for each patient: what changed, what was missed, who needs a call. Records move between the app and the hospital by themselves, so nobody has to type them twice.',
     chips: [
       { icon: 'icon-[lucide--watch]', label: 'Wearable sync' },
       { icon: 'icon-[lucide--list-checks]', label: 'Daily plan' },
@@ -55,19 +49,17 @@ const SERVICES = [
   {
     id: 'teaching',
     eyebrow: 'Education',
-    title: 'Teach on your own app, not somebody else’s platform',
+    title: 'Teach on your own app, not someone else’s',
     icon: 'icon-[lucide--graduation-cap]',
-    intro: 'You keep the students, the data and the money.',
+    intro: 'You keep your students, your data, and your money.',
     platforms: ['ios', 'android', 'web'],
-    scene: 'duo',
-    site: 'learn.youracademy.com',
-    accent: 'from-indigo-100 via-violet-100 to-sky-50',
-    tint: 'from-indigo-400 to-violet-500',
-    float: { title: 'Your name on the door', copy: 'No marketplace logo, no cut taken, no competitor advertised beside you.' },
-    stat: { value: '0%', label: 'Platform cut', copy: 'Course fees land in your account. The only fee is the payment processor.' },
+    scene: 'course',
+    ink: 'indigo',
+    float: { title: 'Your name on the door', copy: 'No other logo, no cut taken, no other teacher shown next to you.' },
+    stat: { value: '0%', label: 'Platform cut', copy: 'Course fees go straight to you. The only fee is for handling payments.' },
     summaryTitle: 'How it works in plain terms',
     description:
-      'Students download your app, not a marketplace where three other teachers are advertised beside you. Inside, they get the course, the live class, the notes and the quiz in one place, and it remembers where they stopped. Live batches run on a schedule with reminders, so attendance stops depending on who checked their email. Quizzes mark themselves and certificates issue automatically when someone finishes. On your side there is a web panel showing who is falling behind, which lesson people quit on, and who is due to renew. Fees are collected in the app, and the website that comes with it has a public page per course, so search engines can send you students you did not pay for.',
+      'Students use your own app, not a marketplace where three other teachers are shown right next to you. Inside, they get the lessons, live classes, notes, and quizzes all in one place, and it remembers exactly where they left off. Live classes run on a set schedule with reminders, so people actually show up. Quizzes grade themselves, and certificates are handed out the moment someone finishes. You get a simple screen showing who is falling behind, where people give up, and who needs to renew. Fees are paid inside the app, and your course also gets its own web page, so people can find you on Google without you paying for ads.',
     chips: [
       { icon: 'icon-[lucide--video]', label: 'Live classes' },
       { icon: 'icon-[lucide--book-open]', label: 'Course library' },
@@ -80,17 +72,15 @@ const SERVICES = [
     eyebrow: 'Appointments',
     title: 'Take bookings while you sleep',
     icon: 'icon-[lucide--calendar-check]',
-    intro: 'The slot gets filled at midnight without anyone answering the phone.',
+    intro: 'A slot gets filled at midnight — no one has to answer the phone.',
     platforms: ['web', 'ios', 'android'],
-    scene: 'duo',
-    site: 'book.yoursalon.com',
-    accent: 'from-amber-50 via-orange-100 to-rose-50',
-    tint: 'from-amber-400 to-orange-500',
-    float: { title: 'Held, paid, confirmed', copy: 'A deposit turns a maybe into a booking you can plan staff around.' },
-    stat: { value: '−62%', label: 'No-shows', copy: 'A deposit and two reminders remove most of the empty chairs.' },
+    scene: 'day',
+    ink: 'amber',
+    float: { title: 'Held, paid, confirmed', copy: 'A deposit turns a maybe into a real booking you can plan around.' },
+    stat: { value: '−62%', label: 'No-shows', copy: 'A deposit and two reminders stop most empty seats.' },
     summaryTitle: 'How it works in plain terms',
     description:
-      'Customers open a page — no download, no account — pick a person, pick a time, and pay a deposit to hold it. The calendar only offers slots you can actually staff, because it knows who works when, how long each service takes and how much gap to leave between them. Reminders go out the day before and an hour before, which is where most no-shows disappear. If someone cancels late, the slot goes back on sale automatically and anyone on the waiting list is told. Your team sees the day on their phone, and you see the week. It syncs with the calendar you already use, so nothing gets double-booked while somebody was writing it down.',
+      'Customers open a page — no app to download, no account needed — pick a person, pick a time, and pay a small deposit to hold it. It only shows times you can actually cover, because it knows who works when, how long each job takes, and how much gap to leave between them. Reminders go out the day before and an hour before, which is when most no-shows happen. If someone cancels late, that slot goes back up for sale right away, and anyone waiting is told. Your team sees today’s plan on their phone, and you see the whole week. It also matches the calendar you already use, so nothing gets booked twice by mistake.',
     chips: [
       { icon: 'icon-[lucide--credit-card]', label: 'Deposits' },
       { icon: 'icon-[lucide--bell-ring]', label: 'Reminders' },
@@ -101,19 +91,17 @@ const SERVICES = [
   {
     id: 'food',
     eyebrow: 'Restaurants',
-    title: 'Sell food without handing over a commission',
+    title: 'Sell food without paying a big commission',
     icon: 'icon-[lucide--utensils-crossed]',
-    intro: 'The order lands in your kitchen, and the customer stays yours.',
+    intro: 'The order goes straight to your kitchen. The customer stays yours.',
     platforms: ['ios', 'android', 'web'],
-    scene: 'duo',
-    site: 'menu.yourkitchen.com',
-    accent: 'from-orange-100 via-amber-100 to-yellow-50',
-    tint: 'from-orange-400 to-amber-500',
-    float: { title: 'Scan, order, done', copy: 'The table QR opens your menu — not an aggregator with your rivals on it.' },
-    stat: { value: '0%', label: 'Marketplace fee', copy: 'On a ₹500 order, the 25% an aggregator takes stays in the till.' },
+    scene: 'kitchen',
+    ink: 'orange',
+    float: { title: 'Scan, order, done', copy: 'The QR code on the table opens your own menu, not an app full of your rivals.' },
+    stat: { value: '0%', label: 'Marketplace fee', copy: 'On a ₹500 order, the 25% a delivery app usually takes stays with you.' },
     summaryTitle: 'How it works in plain terms',
     description:
-      'Every table gets a QR code. Scanning it opens your menu with today’s prices and whatever has actually run out already hidden. The order goes straight to the kitchen screen, so nobody is walking dockets around, and payment happens on the phone if you want it to. The same menu works for takeaway and delivery, and because customers order from you rather than an aggregator, you keep their number and can tell them about a Friday special without paying to reach them. Photographs, prices and sold-out items are changed by you in a minute, from a phone, standing in the kitchen. Nothing needs a developer and nothing waits for an app store review.',
+      'Every table gets a QR code. Scanning it opens your menu with today’s prices, and anything sold out is already hidden. The order goes straight to your kitchen screen, so nobody is running paper tickets around, and customers can pay right from their phone if they want. The same menu also works for takeaway and delivery. Because people order straight from you, you keep their phone number and can tell them about a Friday deal without paying anyone to reach them. You can change photos, prices, or sold-out items yourself in a minute, right from your phone in the kitchen. No developer needed, no waiting for an app store.',
     chips: [
       { icon: 'icon-[lucide--scan-qr-code]', label: 'Table QR' },
       { icon: 'icon-[lucide--truck]', label: 'Own delivery' },
@@ -124,19 +112,17 @@ const SERVICES = [
   {
     id: 'agent',
     eyebrow: 'AI support',
-    title: 'Support that answers from your documents, not a script',
+    title: 'A support helper that reads your files, not a script',
     icon: 'icon-[lucide--bot]',
-    intro: 'It reads your policies so your customers do not have to.',
+    intro: 'It reads your rules, so your customers don’t have to ask.',
     platforms: ['web'],
     scene: 'agent',
-    site: 'help.yourbrand.com',
-    accent: 'from-violet-100 via-fuchsia-100 to-indigo-50',
-    tint: 'from-violet-400 to-fuchsia-500',
-    float: { title: 'Shows its working', copy: 'Every answer names the document and page it came from.' },
-    stat: { value: '82%', label: 'Never reach a human', copy: 'The rest arrive at your team already summarised and sorted.' },
+    ink: 'violet',
+    float: { title: 'Shows its work', copy: 'Every answer points to the exact document and page it came from.' },
+    stat: { value: '82%', label: 'Never reach a human', copy: 'The rest reach your team already summed up and sorted.' },
     summaryTitle: 'How it works in plain terms',
     description:
-      'We feed it what you already have — your policy documents, price list, delivery terms and the last year of support tickets. After that it answers customers in seconds, in your tone, using only what is in those files. It does not invent an answer to look helpful: every reply names the document and page it came from, so you can check it, and so can the customer. You set the lines it must not cross. Anything about refunds over a limit, anything legal, anything it is less than sure about goes to a person, with a summary of what was already asked. When you change a policy, you upload the new file and the answers change with it the same day.',
+      'We give it what you already have — your policies, your price list, your delivery rules, and last year’s support chats. From then on, it answers customers in seconds, in your tone, using only what is in those files. It never makes up an answer just to sound helpful — every reply names the exact document and page it came from, so you and the customer can both check it. You decide what it is not allowed to answer. Anything about a big refund, anything legal, or anything it is not sure about gets sent to a real person, along with a short summary of what was already asked. When you change a rule, you upload the new file, and the answers change that same day.',
     chips: [
       { icon: 'icon-[lucide--file-text]', label: 'Your documents' },
       { icon: 'icon-[lucide--check]', label: 'Cited answers' },
@@ -147,19 +133,17 @@ const SERVICES = [
   {
     id: 'delivery',
     eyebrow: 'Logistics',
-    title: 'Let customers watch the order come to them',
+    title: 'Let customers watch their order arrive',
     icon: 'icon-[lucide--truck]',
-    intro: 'The "where is my order" call stops coming.',
+    intro: 'The "where is my order" phone call stops happening.',
     platforms: ['ios', 'android', 'web'],
-    scene: 'duo',
-    site: 'track.yourbrand.com',
-    accent: 'from-sky-100 via-cyan-100 to-blue-50',
-    tint: 'from-sky-400 to-cyan-500',
-    float: { title: 'A map, not a promise', copy: 'An ETA that moves with the traffic the driver is actually in.' },
-    stat: { value: '−40%', label: 'Support calls', copy: 'People stop phoning when they can see the van on a map.' },
+    scene: 'route',
+    ink: 'sky',
+    float: { title: 'A map, not a guess', copy: 'The arrival time updates with the traffic the driver is really stuck in.' },
+    stat: { value: '−40%', label: 'Support calls', copy: 'People stop calling once they can see the van on a map.' },
     summaryTitle: 'How it works in plain terms',
     description:
-      'Your driver gets an app with the day’s stops in a sensible order, turn-by-turn directions, and a place to capture a signature or a photo at the door. Your customer gets a link — no app to install — showing where their order is and an arrival time that updates as the driver moves, not a four-hour window invented in the morning. If a delivery fails, the reason and the photo are on the record before the driver leaves the street, which settles most disputes before they start. You see the whole fleet on one screen: who is running late, who has finished, and what tomorrow should look like based on what actually happened today.',
+      'Your driver gets an app with today’s stops already sorted in the best order, turn-by-turn directions, and a spot to grab a signature or photo at the door. Your customer gets a link — no app to install — showing exactly where their order is, with an arrival time that updates as the driver moves, not a guess made in the morning. If a delivery fails, the reason and a photo are saved before the driver even leaves the street, which settles most complaints before they start. You see your whole team on one screen: who is running late, who is done, and what tomorrow should look like based on today.',
     chips: [
       { icon: 'icon-[lucide--map-pin]', label: 'Live map' },
       { icon: 'icon-[lucide--navigation]', label: 'Driver app' },
@@ -170,19 +154,17 @@ const SERVICES = [
   {
     id: 'membership',
     eyebrow: 'Fitness',
-    title: 'A membership that renews itself',
+    title: 'A gym membership that renews itself',
     icon: 'icon-[lucide--dumbbell]',
-    intro: 'A failed card should not quietly cost you a member.',
+    intro: 'A failed card shouldn’t quietly lose you a member.',
     platforms: ['ios', 'android', 'web'],
-    scene: 'duo',
-    site: 'join.yourgym.com',
-    accent: 'from-lime-100 via-emerald-100 to-teal-50',
-    tint: 'from-lime-400 to-emerald-500',
-    float: { title: 'Check in, book, pay', copy: 'One app for the door, the class list and the monthly fee.' },
-    stat: { value: '+18%', label: 'Renewals kept', copy: 'Retrying a declined card politely recovers most lapsed months.' },
+    scene: 'member',
+    ink: 'emerald',
+    float: { title: 'Check in, book, pay', copy: 'One app for the door, the class list, and the monthly fee.' },
+    stat: { value: '+18%', label: 'Renewals kept', copy: 'Retrying a failed card politely saves most memberships that would’ve been lost.' },
     summaryTitle: 'How it works in plain terms',
     description:
-      'Members join on their phone, pick a plan, and get a code that opens the door. Classes are booked in the app, with a waiting list that fills a cancelled spot automatically instead of leaving it empty. The monthly fee collects itself, and when a card is declined the system retries on the days cards usually clear and messages the member before their access lapses — that alone recovers memberships you would otherwise lose without ever knowing why. Freezing a membership for a holiday takes one tap rather than a conversation at the desk. You get to see who has not been in for three weeks, which is the moment a friendly message still works.',
+      'Members join on their phone, pick a plan, and get a code that opens the door. Classes are booked in the app, and if someone cancels, the next person on the waiting list is added automatically. The monthly fee is charged by itself. If a card fails, it tries again on the days cards usually work, and messages the member before they lose access — this alone saves memberships you would otherwise lose without even knowing. Pausing a membership for a holiday takes one tap, not a chat at the front desk. You can see who hasn’t shown up in three weeks — right when a friendly message still works.',
     chips: [
       { icon: 'icon-[lucide--user-check]', label: 'Door check-in' },
       { icon: 'icon-[lucide--calendar-check]', label: 'Class booking' },
@@ -193,19 +175,17 @@ const SERVICES = [
   {
     id: 'inventory',
     eyebrow: 'Retail',
-    title: 'Stock that reorders before you notice it is low',
+    title: 'Stock that reorders itself before it runs out',
     icon: 'icon-[lucide--boxes]',
-    intro: 'One count that the counter, the website and the app all agree on.',
+    intro: 'One count that your counter, website, and app all agree on.',
     platforms: ['web', 'android'],
-    scene: 'phone',
-    site: null,
-    accent: 'from-slate-100 via-sky-100 to-indigo-50',
-    tint: 'from-slate-400 to-sky-500',
-    float: { title: 'Scan it, it is counted', copy: 'A phone camera does the job a handheld scanner used to.' },
-    stat: { value: '1 count', label: 'Across every channel', copy: 'Selling the last one twice stops being possible.' },
+    scene: 'stock',
+    ink: 'sky',
+    float: { title: 'Scan it, it’s counted', copy: 'A phone camera now does the job a handheld scanner used to.' },
+    stat: { value: '1 count', label: 'Across every channel', copy: 'You can’t sell the same last item twice by accident anymore.' },
     summaryTitle: 'How it works in plain terms',
     description:
-      'Everything you sell lives in one list. When something sells — at the counter, on the website, in the app — the count drops everywhere at once, so you cannot sell the last one twice and then apologise. Staff scan barcodes with a phone to receive stock or run a count, which takes minutes rather than a Sunday. You set a floor per item, and when stock reaches it the system either warns you or raises the purchase order to the supplier itself, with the quantity you usually buy. It also tells you the boring but expensive things: what has not moved in ninety days, what sells out every weekend, and what you are buying too often in small amounts.',
+      'Everything you sell lives in one list. The moment something sells — at the counter, on the website, or in the app — the count drops everywhere at once, so you never sell the last one twice and have to apologise. Staff scan barcodes with a phone to receive new stock or do a count, which now takes minutes instead of a whole Sunday. You set a minimum for each item, and when stock hits it, the system either warns you or sends the usual order to your supplier automatically. It also tells you the boring but costly stuff: what hasn’t sold in 90 days, what always runs out on weekends, and what you keep buying in tiny amounts.',
     chips: [
       { icon: 'icon-[lucide--scan-line]', label: 'Phone scanning' },
       { icon: 'icon-[lucide--bell]', label: 'Low-stock alerts' },
@@ -216,19 +196,17 @@ const SERVICES = [
   {
     id: 'field',
     eyebrow: 'Field teams',
-    title: 'Send the crew out with the paperwork already done',
+    title: 'Send your crew out with the paperwork already done',
     icon: 'icon-[lucide--clipboard-list]',
-    intro: 'It has to work in a basement with no signal.',
+    intro: 'It has to work even in a basement with no signal.',
     platforms: ['ios', 'android'],
-    scene: 'phone',
-    site: null,
-    accent: 'from-teal-100 via-cyan-100 to-slate-50',
-    tint: 'from-teal-400 to-cyan-500',
-    float: { title: 'Offline is the normal case', copy: 'Everything saves on the phone and syncs when the bars come back.' },
-    stat: { value: '0 bars', label: 'Still works', copy: 'Jobs, forms and photos are captured with no connection at all.' },
+    scene: 'job',
+    ink: 'teal',
+    float: { title: 'No signal? No problem', copy: 'Everything saves on the phone and sends itself once the signal returns.' },
+    stat: { value: '0 bars', label: 'Still works', copy: 'Jobs, forms, and photos are captured even with zero connection.' },
     summaryTitle: 'How it works in plain terms',
     description:
-      'Each engineer opens the app in the morning and sees their jobs in the order that makes sense for the driving, with the address, the history of that site, and the checklist for the work. They tick things off, take photos, and get the customer to sign on the screen. None of that needs a signal — it is stored on the phone and uploaded the moment they are back in coverage, so nobody loses an afternoon of work in a plant room. The office sees jobs turn green as they finish, and the report the customer receives is built from what was actually captured on site instead of a form somebody types up from memory two days later.',
+      'Each worker opens the app in the morning and sees today’s jobs in a sensible order, with the address, the site’s history, and a checklist for the work. They tick off tasks, take photos, and get the customer to sign right on the screen. None of this needs a signal — it saves on the phone and uploads the moment they are back in range, so nobody loses a day’s work in a basement. The office watches jobs turn green as they finish, and the report the customer gets is built from what actually happened on site, not typed up from memory two days later.',
     chips: [
       { icon: 'icon-[lucide--wifi-off]', label: 'Works offline' },
       { icon: 'icon-[lucide--list-checks]', label: 'Checklists' },
@@ -239,19 +217,17 @@ const SERVICES = [
   {
     id: 'loyalty',
     eyebrow: 'Retention',
-    title: 'Loyalty and referrals that run themselves',
+    title: 'Loyalty points and referrals that run by themselves',
     icon: 'icon-[lucide--gift]',
-    intro: 'No paper cards, no stamps, no arguments at the till.',
+    intro: 'No paper cards, no stamps, no arguing at the till.',
     platforms: ['ios', 'android', 'web'],
-    scene: 'duo',
-    site: 'rewards.yourbrand.com',
-    accent: 'from-fuchsia-100 via-purple-100 to-rose-50',
-    tint: 'from-fuchsia-400 to-purple-500',
-    float: { title: 'Points people can see', copy: 'A balance in the app beats a card nobody can find.' },
-    stat: { value: '2.4×', label: 'Repeat rate', copy: 'Members come back more often than the same customer did before.' },
+    scene: 'points',
+    ink: 'fuchsia',
+    float: { title: 'Points you can actually see', copy: 'A balance on the phone beats a card that’s always lost.' },
+    stat: { value: '2.4×', label: 'Repeat rate', copy: 'Members come back far more often than they used to.' },
     summaryTitle: 'How it works in plain terms',
     description:
-      'Customers earn points for buying, and they can see the balance on their phone rather than hunting for a card with six stamps on it. Rewards unlock on their own and get applied at checkout, so your staff never have to judge whether somebody qualifies. Tiers give regulars something to aim at, and the app tells them how close they are. Referrals work the same way: a customer shares a link, and when their friend buys, both sides are credited automatically with no code to remember or claim to verify. You choose what earns points and what they are worth, and you can see plainly whether the whole scheme is bringing back enough repeat business to pay for itself.',
+      'Customers earn points when they buy, and they see their balance on their phone instead of hunting for a card with a few stamps on it. Rewards unlock by themselves and apply at checkout, so your staff never have to guess if someone qualifies. Tiers give regulars something to aim for, and the app shows how close they are. Referrals work the same way: a customer shares a link, and when a friend buys, both people get their reward automatically — no code to remember, nothing to prove. You choose what earns points and what they are worth, and you can see clearly if the whole thing brings back enough business to be worth it.',
     chips: [
       { icon: 'icon-[lucide--star]', label: 'Points & tiers' },
       { icon: 'icon-[lucide--handshake]', label: 'Referral links' },
@@ -262,19 +238,17 @@ const SERVICES = [
   {
     id: 'property',
     eyebrow: 'Real estate',
-    title: 'Let buyers walk the property before they drive to it',
+    title: 'Let buyers walk through a home before they drive there',
     icon: 'icon-[lucide--building-2]',
-    intro: 'Fewer wasted viewings, better ones.',
+    intro: 'Fewer wasted visits. Better ones.',
     platforms: ['web', 'ios', 'android'],
-    scene: 'duo',
-    site: 'listings.youragency.com',
-    accent: 'from-stone-100 via-amber-50 to-yellow-50',
-    tint: 'from-stone-400 to-amber-500',
-    float: { title: 'Tour it from the sofa', copy: 'A walkthrough answers the questions a photo gallery cannot.' },
-    stat: { value: '−35%', label: 'Wasted viewings', copy: 'People who tour online arrive already interested.' },
+    scene: 'listing',
+    ink: 'amber',
+    float: { title: 'Tour it from your sofa', copy: 'A video walkthrough answers questions that photos can’t.' },
+    stat: { value: '−35%', label: 'Wasted viewings', copy: 'People who take the online tour arrive already interested.' },
     summaryTitle: 'How it works in plain terms',
     description:
-      'Each property gets a page with proper photographs, a floor plan and a virtual walkthrough, so somebody can decide from the sofa whether it is worth the drive. Buyers save searches and get told the moment something matching appears, which is usually before it reaches the big portals. Booking a viewing is a button, and it lands in your agents’ calendars with the buyer’s details attached. Your team updates a listing once and it changes on the website, the app and the portal feeds together. Because the listing pages are built to be found in search, the enquiries that come from them are yours rather than leads you have to buy back from a portal every month.',
+      'Each home gets its own page with real photos, a floor plan, and a video walkthrough, so someone can decide from their sofa if it’s worth the drive. Buyers save their searches and get told the second something new matches — often before it shows up on the big property sites. Booking a visit is one button, and it lands straight in your agent’s calendar with the buyer’s details attached. Your team updates a listing once, and it changes everywhere — website, app, and other listing sites — at the same time. Because your listing pages are built to show up in search, the enquiries you get are yours, not leads you had to buy back every month.',
     chips: [
       { icon: 'icon-[lucide--video]', label: 'Virtual tours' },
       { icon: 'icon-[lucide--search]', label: 'Saved searches' },
@@ -285,19 +259,17 @@ const SERVICES = [
   {
     id: 'marketplace',
     eyebrow: 'Marketplace',
-    title: 'Let other people sell for you and take your cut automatically',
+    title: 'Let others sell for you — and get paid automatically',
     icon: 'icon-[lucide--store]',
     intro: 'The hard part is the money. That is the part we automate.',
     platforms: ['web', 'ios', 'android'],
-    scene: 'duo',
-    site: 'shop.yourmarket.com',
-    accent: 'from-blue-100 via-indigo-100 to-violet-50',
-    tint: 'from-blue-400 to-indigo-500',
-    float: { title: 'Split at the moment of sale', copy: 'Your commission and their share separate before anyone asks.' },
-    stat: { value: 'T+1', label: 'Vendor payouts', copy: 'Sellers are paid on schedule without you touching a spreadsheet.' },
+    scene: 'payout',
+    ink: 'blue',
+    float: { title: 'Split the moment it sells', copy: 'Your share and their share are separated before anyone has to ask.' },
+    stat: { value: 'T+1', label: 'Seller payouts', copy: 'Sellers get paid on schedule, with no spreadsheets on your side.' },
     summaryTitle: 'How it works in plain terms',
     description:
-      'Sellers sign themselves up, upload what they sell, and manage their own orders and stock in a dashboard, so your team is not typing in other people’s catalogues. When a customer buys, the payment splits automatically: your commission to you, the rest held for the seller, with the tax handled correctly on both sides. Payouts run on a schedule, and every seller can see exactly what they are owed and why, which removes most of the emails you would otherwise be answering. You control who is allowed to list, what quality of photograph is acceptable, and what happens on a refund. Buyers see one shop, one basket and one checkout, however many sellers are behind it.',
+      'Sellers sign themselves up, add what they’re selling, and manage their own orders and stock — your team never has to type in someone else’s catalogue. When a customer buys, the payment splits itself automatically: your commission to you, the rest set aside for the seller, with tax worked out correctly on both sides. Payouts happen on a schedule, and every seller can see exactly what they’re owed and why, which cuts out most of the emails you’d otherwise be answering. You decide who is allowed to sell, what quality of photo is okay, and what happens with a refund. Buyers just see one shop, one cart, and one checkout, no matter how many sellers are behind it.',
     chips: [
       { icon: 'icon-[lucide--user-check]', label: 'Vendor onboarding' },
       { icon: 'icon-[lucide--split]', label: 'Split payments' },
@@ -308,19 +280,17 @@ const SERVICES = [
   {
     id: 'events',
     eyebrow: 'Events',
-    title: 'Sell the tickets and get the door moving',
+    title: 'Sell tickets and keep the door moving',
     icon: 'icon-[lucide--ticket]',
     intro: 'The queue outside is a scanning problem, not a staffing one.',
     platforms: ['web', 'ios', 'android'],
-    scene: 'duo',
-    site: 'tickets.yourevent.com',
-    accent: 'from-cyan-100 via-sky-100 to-emerald-50',
-    tint: 'from-cyan-400 to-sky-500',
-    float: { title: 'Scans without wi-fi', copy: 'The door keeps working when the venue’s network does not.' },
-    stat: { value: '3s', label: 'Per guest at the door', copy: 'Scanning beats finding a name on a printed list.' },
+    scene: 'ticket',
+    ink: 'cyan',
+    float: { title: 'Scans without wi-fi', copy: 'The door still works even when the venue’s wi-fi doesn’t.' },
+    stat: { value: '3s', label: 'Per guest at the door', copy: 'Scanning a ticket beats hunting for a name on a printed list.' },
     summaryTitle: 'How it works in plain terms',
     description:
-      'You put up a page with your tiers — early bird, general, VIP, whatever you sell — and it takes the money and issues a QR ticket to each buyer’s phone and email. At the door, your staff scan with their own phones. It works with no venue wi-fi, because the guest list is already on the device, and a ticket that has been used once will not pass again even on a different phone. You watch the headcount climb live, which tells you when to open a second door or stop selling. Afterwards you keep the attendee list, so the next event starts with people who already came, not an empty mailing list.',
+      'You set up a page with your ticket types — early bird, general, VIP, whatever you’re selling — and it takes payment and sends a QR ticket straight to each buyer’s phone and email. At the door, your staff scan tickets with their own phones. It works even with no wi-fi, because the guest list is already saved on the phone, and a ticket that has already been scanned won’t work again, even on a different phone. You watch the headcount grow live, so you know exactly when to open another door or stop selling. Afterwards, you keep the full list of who came, so your next event starts with real people, not an empty mailing list.',
     chips: [
       { icon: 'icon-[lucide--ticket]', label: 'Tiered tickets' },
       { icon: 'icon-[lucide--scan-qr-code]', label: 'Offline entry' },
@@ -333,17 +303,15 @@ const SERVICES = [
     eyebrow: 'Trades & studios',
     title: 'Turn a quote into money without chasing anyone',
     icon: 'icon-[lucide--receipt]',
-    intro: 'The quote, the signature, the invoice and the reminder are one flow.',
+    intro: 'Quote, signature, invoice, and reminder — all in one flow.',
     platforms: ['web', 'ios'],
-    scene: 'duo',
-    site: 'quote.yourstudio.com',
-    accent: 'from-neutral-100 via-slate-100 to-zinc-50',
-    tint: 'from-neutral-400 to-slate-500',
-    float: { title: 'Signed on a phone', copy: 'Approval happens on the spot, not after a printer is found.' },
+    scene: 'quote',
+    ink: 'slate',
+    float: { title: 'Signed on a phone', copy: 'Approved on the spot — no printer, no scanner needed.' },
     stat: { value: '11 days', label: 'Faster payment', copy: 'Automatic reminders collect what a busy week would forget.' },
     summaryTitle: 'How it works in plain terms',
     description:
-      'You build a quote from the prices you already use and send it as a link. Your client opens it on a phone, sees what is included, and approves it with a signature there and then instead of printing and scanning something. The moment it is approved it becomes a job, and when the work is done it becomes an invoice with the same numbers on it, so nothing is retyped and nothing is missed. If it is not paid, reminders go out on their own on a schedule you choose, politely, which is the part everybody hates doing. You can see at a glance what has been quoted, what has been approved, what has been invoiced and what is genuinely overdue.',
+      'You build a quote using the prices you already use, and send it as a link. Your client opens it on their phone, sees exactly what’s included, and signs it right there — no printing, no scanning. The moment it’s approved, it becomes a job, and once the work is done, it becomes an invoice with the same numbers already on it, so nothing gets retyped or missed. If it isn’t paid, reminders go out by themselves, politely, on a schedule you choose — the part everyone hates doing. You can see at a glance what’s been quoted, what’s approved, what’s invoiced, and what’s actually overdue.',
     chips: [
       { icon: 'icon-[lucide--file-text]', label: 'Quick quotes' },
       { icon: 'icon-[lucide--signature]', label: 'E-signature' },
@@ -354,108 +322,318 @@ const SERVICES = [
 ]
 
 const PLATFORM_META = {
-  ios: { label: 'iOS app', icon: 'icon-[simple-icons--apple]' },
-  android: { label: 'Android app', icon: 'icon-[simple-icons--android]' },
-  web: { label: 'Website', icon: 'icon-[lucide--globe]' },
+  ios: { label: 'iOS app', short: 'iOS', icon: 'icon-[simple-icons--apple]' },
+  android: { label: 'Android app', short: 'Android', icon: 'icon-[simple-icons--android]' },
+  web: { label: 'Website', short: 'Web', icon: 'icon-[lucide--globe]' },
 }
+
+// Even entries render as a plate; odd entries cycle through the other three layouts.
+const LAYOUTS = [FigureBlock, SpecBlock, PlainBlock]
 
 export default function ServiceCatalog() {
   return (
     <section id="catalog" className="px-4 py-16 sm:px-8 sm:py-20 lg:px-16">
       <div className="container mx-auto flex max-w-7xl flex-col gap-20 sm:gap-28">
-        {SERVICES.map((service, index) => (
-          <ServiceBlock key={service.id} service={service} index={index} />
-        ))}
+        {SERVICES.map((service, index) => {
+          const Block = index % 2 === 1 ? PlateBlock : LAYOUTS[Math.floor(index / 2) % LAYOUTS.length]
+          return <Block key={service.id} service={service} index={index} />
+        })}
       </div>
 
       <p className="font-opensans mt-16 text-center text-sm text-base-content/50">
-        Not on the list? It is the same team and the same stack —{' '}
+        Don't see what you need? It's still the same team —{' '}
         <a href="#contact" className="font-semibold text-base-content underline underline-offset-4">
-          tell us the outcome
+          tell us what you want
         </a>{' '}
-        and we will tell you what it takes.
+        and we'll tell you how we can build it.
       </p>
     </section>
   )
 }
 
-function ServiceBlock({ service, index }) {
+// ---------- Shared parts ----------
+function num(index) {
+  return String(index + 1).padStart(2, '0')
+}
+
+function platformLine(service) {
+  return service.platforms.map((platform) => PLATFORM_META[platform].short).join(' · ')
+}
+
+// One flat surface for every screenshot, so it reads as photographed, not styled.
+function Figure({ service, className = '' }) {
+  return (
+    <div className={`flex justify-center rounded-lg border border-base-200 bg-base-200/40 p-5 sm:p-6 ${className}`}>
+      <Scene service={service} bare />
+    </div>
+  )
+}
+
+function Spec({ label, children, className = '' }) {
+  return (
+    <div className={className}>
+      <p className="font-opensans text-[10px] font-semibold tracking-widest text-base-content/35 uppercase">{label}</p>
+      <div className="font-opensans mt-1 text-[13px] text-base-content/70">{children}</div>
+    </div>
+  )
+}
+
+// Layout one: figure and caption, printed-catalogue style — nothing floats or glows.
+function FigureBlock({ service, index }) {
+  const ink = inkOf(service)
+
   return (
     <article id={service.id} className="scroll-mt-24">
-      <header className="flex flex-col items-center text-center">
-        <span className="flex size-11 items-center justify-center rounded-full bg-linear-to-br from-indigo-600 to-violet-600 shadow-lg">
-          <span aria-hidden="true" className={`${service.icon} size-5 text-white`} />
-        </span>
+      <span aria-hidden="true" className={`block h-0.5 w-10 ${ink.bg}`} />
 
-        <p className="font-opensans mt-4 text-[10px] font-semibold tracking-widest text-base-content/45 uppercase">
-          {String(index + 1).padStart(2, '0')} · {service.eyebrow}
+      <div className="mt-4 flex flex-wrap items-baseline gap-x-4 gap-y-1">
+        <p className="font-mono text-[11px] font-semibold tracking-wide text-base-content">
+          {num(index)} / {service.eyebrow}
         </p>
+        <p className="font-opensans ml-auto text-[11px] text-base-content/40">{platformLine(service)}</p>
+      </div>
 
-        <h3 className="font-cinzel mt-2 max-w-3xl text-3xl font-extrabold tracking-tight text-base-content sm:text-4xl">
+      <h3 className="font-cinzel mt-3 max-w-3xl text-3xl font-extrabold tracking-tight text-base-content sm:text-4xl">
+        {service.title}
+      </h3>
+
+      <div className="mt-8 grid gap-8 lg:grid-cols-[22rem_1fr] lg:gap-14">
+        <figure className="m-0">
+          <Figure service={service} />
+
+          <figcaption className="font-opensans mt-3 text-[11px] leading-relaxed text-base-content/45">
+            <span className="font-mono text-base-content/35">Fig. {num(index)}</span> — {service.float.title}.{' '}
+            {service.float.copy}
+          </figcaption>
+        </figure>
+
+        <div>
+          <p className="font-opensans text-base leading-relaxed text-base-content/80 sm:text-lg">{service.intro}</p>
+
+          <p className="font-opensans mt-4 text-sm leading-relaxed text-base-content/60">{service.description}</p>
+
+          <p className="font-opensans mt-5 flex items-baseline gap-2.5 text-sm leading-relaxed text-base-content/60">
+            <span className={`font-cinzel shrink-0 text-lg font-bold ${ink.text}`}>{service.stat.value}</span>
+            <span>
+              <span className="font-semibold text-base-content/80">{service.stat.label.toLowerCase()}</span> —{' '}
+              {service.stat.copy}
+            </span>
+          </p>
+
+          <p className="font-opensans mt-6 border-t border-base-200 pt-4 text-[12px] text-base-content/45">
+            {service.chips.map((chip) => chip.label).join(' · ')}
+          </p>
+        </div>
+      </div>
+    </article>
+  )
+}
+
+// Layout two: a datasheet — countable facts sit in a left spec column beside the prose.
+function SpecBlock({ service, index }) {
+  const ink = inkOf(service)
+
+  return (
+    <article id={service.id} className="scroll-mt-24 border-y border-base-200 py-10">
+      <div className="grid gap-8 lg:grid-cols-[12rem_1fr] lg:gap-12">
+        <aside className="flex flex-col gap-5">
+          <div className="flex items-center gap-2 border-b border-base-200 pb-4">
+            <span aria-hidden="true" className={`${service.icon} size-4 ${ink.text}`} />
+            <p className="font-mono text-[11px] font-semibold text-base-content">{num(index)}</p>
+          </div>
+
+          <Spec label="Sector">{service.eyebrow}</Spec>
+
+          <Spec label="Platforms">
+            {service.platforms.map((platform) => (
+              <span key={platform} className="block">
+                {PLATFORM_META[platform].label}
+              </span>
+            ))}
+          </Spec>
+
+          <Spec label={service.stat.label}>
+            <span className={`font-cinzel text-2xl font-extrabold ${ink.text}`}>{service.stat.value}</span>
+          </Spec>
+
+          <Spec label="Includes">
+            <ul className="flex list-none flex-col gap-1 p-0">
+              {service.chips.map((chip) => (
+                <li key={chip.label} className="text-[12px] text-base-content/60">
+                  {chip.label}
+                </li>
+              ))}
+            </ul>
+          </Spec>
+        </aside>
+
+        <div className="flex h-full flex-col">
+          <h3 className="font-cinzel text-3xl font-extrabold tracking-tight text-base-content sm:text-4xl">
+            {service.title}
+          </h3>
+
+          <p className="font-opensans mt-3 max-w-2xl text-base leading-relaxed text-base-content/70">{service.intro}</p>
+
+          <div className="mt-6 flex flex-1 flex-col gap-6 sm:flex-row sm:gap-8">
+            <div className="flex shrink-0 flex-col rounded-lg border border-base-200 bg-base-200/40 p-5 sm:w-80">
+              <div className="flex flex-1 items-center justify-center">
+                <Scene service={service} bare />
+              </div>
+
+              <p className="font-opensans mt-4 border-t border-base-200 pt-3 text-[11px] leading-relaxed text-base-content/45">
+                <span className="font-semibold text-base-content/60">{service.float.title}</span> — {service.float.copy}
+              </p>
+            </div>
+
+            <div>
+              <p className="font-opensans text-sm leading-relaxed text-base-content/60">{service.description}</p>
+              <p className="font-opensans mt-4 text-[12px] leading-relaxed text-base-content/45">
+                {service.stat.copy}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+  )
+}
+
+// Layout three: the original shape, deflated — keeps pills and heading, drops gradients and glass.
+function PlainBlock({ service, index }) {
+  const ink = inkOf(service)
+
+  return (
+    <article id={service.id} className="scroll-mt-24">
+      <header className="flex flex-wrap items-center gap-x-3 gap-y-2 border-b border-base-200 pb-4">
+        <span aria-hidden="true" className={`${service.icon} size-5 shrink-0 ${ink.text}`} />
+
+        <h3 className="font-cinzel text-2xl font-extrabold tracking-tight text-base-content sm:text-3xl">
           {service.title}
         </h3>
 
-        <p className="font-opensans mt-4 max-w-2xl text-sm text-base-content/60 sm:text-base">{service.intro}</p>
-
-        <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
-          {service.platforms.map((platform) => (
-            <span
-              key={platform}
-              className="font-opensans flex items-center gap-1.5 rounded-full border border-base-200 bg-base-100 px-3 py-1 text-[11px] font-medium text-base-content/60 shadow-sm"
-            >
-              <span aria-hidden="true" className={`${PLATFORM_META[platform].icon} size-3`} />
-              {PLATFORM_META[platform].label}
-            </span>
-          ))}
-        </div>
+        <p className="font-mono ml-auto text-[11px] font-semibold text-base-content">
+          {num(index)} / {service.eyebrow}
+        </p>
       </header>
 
-      <div className="mt-8 grid gap-4 lg:grid-cols-3">
-        <div
-          className={`relative overflow-hidden rounded-2xl border border-base-200 bg-linear-to-br ${service.accent} shadow-sm lg:col-span-2`}
-        >
-          <div aria-hidden="true" className="absolute inset-0 bg-[url('/images/noise.png')] opacity-10" />
-          <Scene service={service} />
+      <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_22rem] lg:gap-12">
+        <div>
+          <p className="font-opensans max-w-2xl text-base leading-relaxed text-base-content/70">{service.intro}</p>
 
-          {/* Glass card sitting over the shot, as on the reference block */}
-          <div className="absolute bottom-4 left-4 max-w-56 rounded-xl border border-white/60 bg-white/70 p-3 shadow-lg backdrop-blur-md sm:max-w-64">
-            <p className="font-opensans text-[11px] font-bold text-slate-800">{service.float.title}</p>
-            <p className="font-opensans mt-1 text-[11px] leading-relaxed text-slate-600">{service.float.copy}</p>
-          </div>
-        </div>
-
-        <div className="relative flex flex-col justify-between overflow-hidden rounded-2xl bg-linear-to-br from-indigo-800 via-indigo-900 to-violet-950 p-6 shadow-lg">
-          <div aria-hidden="true" className="absolute inset-0 bg-[url('/images/noise.png')] opacity-[0.07]" />
-
-          <p className="font-cinzel relative text-4xl font-extrabold tracking-tight text-white">{service.stat.value}</p>
-
-          <div className="relative mt-6">
-            <p className="font-opensans text-[10px] font-semibold tracking-widest text-white/50 uppercase">
+          <p className="mt-5 border-l-2 border-base-300 pl-4">
+            <span className="font-cinzel text-2xl font-extrabold tracking-tight text-base-content">
+              {service.stat.value}
+            </span>{' '}
+            <span className="font-opensans text-[10px] font-semibold tracking-widest text-base-content/40 uppercase">
               {service.stat.label}
-            </p>
-            <p className="font-opensans mt-2 text-sm text-white/85">{service.stat.copy}</p>
-          </div>
-        </div>
-      </div>
+            </span>
+            <span className="font-opensans mt-1 block text-[13px] leading-relaxed text-base-content/55">
+              {service.stat.copy}
+            </span>
+          </p>
 
-      <div className="mt-4 grid gap-6 rounded-2xl border border-base-200 bg-base-100 p-6 shadow-sm lg:grid-cols-[1fr_auto] lg:items-center lg:gap-10">
-        <div className="max-w-2xl">
-          <h4 className="font-opensans text-sm font-bold text-base-content">{service.summaryTitle}</h4>
-          <p className="font-opensans mt-2 text-sm leading-relaxed text-base-content/60">{service.description}</p>
+          <h4 className="font-opensans mt-6 text-sm font-bold text-base-content">{service.summaryTitle}</h4>
+          <p className="font-opensans mt-2 max-w-2xl text-sm leading-relaxed text-base-content/60">
+            {service.description}
+          </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:w-96">
-          {service.chips.map((chip) => (
-            <div
-              key={chip.label}
-              className="flex flex-col items-center gap-2 rounded-xl border border-base-200 px-2 py-3 text-center"
-            >
-              <span aria-hidden="true" className={`${chip.icon} size-4 text-indigo-600 dark:text-indigo-400`} />
-              <span className="font-opensans text-[10px] leading-tight text-base-content/60">{chip.label}</span>
+        <aside>
+          <Figure service={service} />
+
+          <p className="font-opensans mt-3 text-[11px] leading-relaxed text-base-content/45">
+            <span className="font-semibold text-base-content/60">{service.float.title}</span> — {service.float.copy}
+          </p>
+
+          <div className="mt-5 border-t border-base-200 pt-5">
+            <ul className="grid list-none grid-cols-2 gap-x-4 gap-y-2.5 p-0">
+              {service.chips.map((chip) => (
+                <li
+                  key={chip.label}
+                  className="font-opensans flex items-center gap-2 text-[12px] text-base-content/60"
+                >
+                  <span aria-hidden="true" className={`${chip.icon} size-3.5 shrink-0 ${ink.text}`} />
+                  {chip.label}
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-4 flex flex-wrap gap-2">
+              {service.platforms.map((platform) => (
+                <span
+                  key={platform}
+                  className="font-opensans flex items-center gap-1.5 rounded-full border border-base-200 px-2.5 py-1 text-[11px] text-base-content/55"
+                >
+                  <span aria-hidden="true" className={`${PLATFORM_META[platform].icon} size-3`} />
+                  {PLATFORM_META[platform].label}
+                </span>
+              ))}
             </div>
-          ))}
-        </div>
+          </div>
+        </aside>
       </div>
+    </article>
+  )
+}
+
+// Layout four: the plate — full-width headline, screenshot mounted as a plate, write-up in two columns.
+function PlateBlock({ service, index }) {
+  const ink = inkOf(service)
+
+  return (
+    <article id={service.id} className="scroll-mt-24">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 border-b border-base-200 pb-3">
+        <span aria-hidden="true" className={`${service.icon} size-4 shrink-0 ${ink.text}`} />
+        <p className="font-mono text-[11px] font-semibold tracking-wide text-base-content">{num(index)}</p>
+        <p className="font-opensans text-[11px] font-bold tracking-[0.18em] text-base-content uppercase">
+          {service.eyebrow}
+        </p>
+        <p className="font-opensans ml-auto text-[11px] text-base-content/40">{platformLine(service)}</p>
+      </div>
+
+      <h3 className="font-cinzel mt-5 max-w-4xl text-3xl font-extrabold tracking-tight text-base-content sm:text-4xl">
+        {service.title}
+      </h3>
+
+      <p className="font-opensans mt-3 max-w-2xl text-base leading-relaxed text-base-content/70 sm:text-lg">
+        {service.intro}
+      </p>
+
+      <div className="mt-7 flex flex-col gap-6 rounded-lg border border-base-200 bg-base-200/40 p-5 sm:flex-row sm:items-center sm:gap-8 sm:p-6 lg:gap-10">
+        <div className="flex justify-center sm:w-72 sm:shrink-0">
+          <Scene service={service} bare />
+        </div>
+
+        <p className="font-opensans flex-1 text-sm leading-relaxed text-base-content/65">
+          <span className="font-semibold text-base-content/80">{service.float.title}</span> — {service.float.copy}
+        </p>
+
+        <p className="flex flex-1 items-baseline gap-3 border-t border-base-300 pt-5 sm:border-t-0 sm:border-l sm:pt-0 sm:pl-8">
+          <span className={`font-cinzel shrink-0 text-3xl font-extrabold ${ink.text}`}>{service.stat.value}</span>
+          <span>
+            <span className="font-opensans text-[10px] font-semibold tracking-widest text-base-content/45 uppercase">
+              {service.stat.label}
+            </span>
+            <span className="font-opensans mt-1 block text-[13px] leading-relaxed text-base-content/60">
+              {service.stat.copy}
+            </span>
+          </span>
+        </p>
+      </div>
+
+      <div className="mt-8 max-w-5xl">
+        <h4 className="font-opensans text-[10px] font-semibold tracking-widest text-base-content/40 uppercase">
+          In practice
+        </h4>
+        <p className="font-opensans mt-3 text-sm leading-relaxed text-base-content/65 lg:columns-2 lg:gap-12">
+          {service.description}
+        </p>
+      </div>
+
+      <p className="font-opensans mt-7 flex flex-wrap items-baseline gap-x-3 gap-y-1 border-t border-base-200 pt-4">
+        <span className="text-[10px] font-semibold tracking-widest text-base-content/40 uppercase">Includes</span>
+        <span className="text-[12px] text-base-content/55">{service.chips.map((chip) => chip.label).join(' · ')}</span>
+      </p>
     </article>
   )
 }

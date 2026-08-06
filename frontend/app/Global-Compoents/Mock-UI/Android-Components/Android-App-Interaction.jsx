@@ -10,10 +10,7 @@ const ENTRANCE = {
   left: 'android-app-shot-left',
 }
 
-// Same contract as the iOS walkthrough: { 'Screen 1': [url, url], ... }, key
-// order is walk order, each array is that screen top to bottom. Shots stay
-// plain <img> because the URLs arrive at runtime and next/image would need
-// every host listed in next.config's remotePatterns up front.
+// Same shape as the iOS walkthrough: { 'Screen 1': [url, url], ... }; plain <img> since URLs arrive at runtime.
 export default function AndroidAppInteraction({ images = {}, title = 'App', onClose }) {
   const screens = useMemo(
     () => Object.entries(images).filter(([, shots]) => Array.isArray(shots) && shots.length > 0),

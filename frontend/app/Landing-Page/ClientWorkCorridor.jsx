@@ -1,8 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 
-// Outermost chevron first: sizes shrink toward the middle and the delays run in
-// the same order, so the brightening travels inward to the button.
+// Outermost chevron first — sizes and delays shrink inward, so the brightening travels toward the button.
 const CHEVRONS = [
   { size: 'size-8 sm:size-12', delay: 0 },
   { size: 'size-7 sm:size-10', delay: 0.14 },
@@ -11,8 +10,7 @@ const CHEVRONS = [
   { size: 'size-4 sm:size-6', delay: 0.56 },
 ]
 
-// -------** ClientWorkCorridor **---------
-// No panel to read, just direction: every chevron points at the one button.
+// No panel to read, just direction — every chevron points at the one button.
 export default function ClientWorkCorridor() {
   return (
     <section id="client-work" className="px-4 pb-10 sm:pb-10 sm:px-8  lg:px-16">
@@ -68,7 +66,6 @@ export default function ClientWorkCorridor() {
   )
 }
 
-// ---------- One wall of the corridor ----------
 // The right-hand run is the same list mirrored, so both sides point inward.
 function ChevronRun({ side }) {
   const isLeft = side === 'left'

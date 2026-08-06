@@ -7,8 +7,7 @@ import AndroidDialer from './Android-Dialer'
 import AndroidPowerMenu from './Android-PowerMenu'
 import './Android-HomeScreen.css'
 
-// Stand-in shots until real captures land: keys are screens in walk order, each
-// array is that screen top to bottom. Swap this for the object you receive.
+// Stand-in shots until real captures land — swap this for the object you receive.
 const DEMO_APP_SCREENS = {
   Feed: ['https://picsum.photos/seed/cinzel-droid-a/420/930', 'https://picsum.photos/seed/cinzel-droid-b/420/930'],
   Detail: ['https://picsum.photos/seed/cinzel-droid-c/420/930', 'https://picsum.photos/seed/cinzel-droid-d/420/930'],
@@ -44,8 +43,7 @@ export default function AndroidHomeScreen({ className = '', onPowerOff, onRestar
     dialer: () => setDialerOpen(true),
   }
 
-  // Restart is the extra row this menu carries over the iOS one — the shell
-  // replays its boot animation rather than dropping to a black screen.
+  // Restart is the extra row this menu has over the iOS one — it replays the boot animation.
   const handleSelect = (key) => {
     if (key === 'power-off') onPowerOff?.()
     if (key === 'restart') onRestart?.()

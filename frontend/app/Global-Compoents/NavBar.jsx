@@ -1,13 +1,13 @@
 import React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 
-// Hrefs are rooted at `/` so a section link still works from the portfolio
-// route — a bare `#services` would do nothing on any page but the landing one.
+// Hrefs are rooted at `/` so section links still work from the portfolio route.
 const navLinks = [
   { label: 'Services', href: '/services' },
   { label: 'Portfolio', href: '/portfolio' },
-  { label: 'Process', href: '/#process' },
-  { label: 'Trust', href: '/#trust' },
+  // { label: 'Process', href: '/#process' },
+  { label: 'Trust', href: '/trust' },
 ]
 
 export default function NavBar() {
@@ -26,13 +26,8 @@ export default function NavBar() {
             ))}
           </ul>
         </div>
-        <Link href="/" className="flex items-center gap-2 px-1">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-linear-to-br from-slate-900 to-blue-600 text-sm font-bold text-white shadow-sm">
-            C
-          </span>
-          <span className="text-lg font-semibold tracking-tight text-base-content whitespace-nowrap">
-            Cinzel Dynamics
-          </span>
+        <Link href="/" className="flex items-center py-1">
+          <Image src="/images/LogoH.png" alt="Cinzel Dynamics" width={1272} height={454} className="h-10 w-auto sm:h-12" priority />
         </Link>
       </div>
 

@@ -2,8 +2,7 @@ import React from 'react'
 
 import './Web-UI.css'
 
-// Stand-in site. Swap SITE and the section copy for a real project — the frame
-// itself does not care what it is showing.
+// Stand-in site — swap SITE and the section copy for a real project; the frame doesn't care.
 const SITE = {
   brand: 'Meridian',
   domain: 'meridian.studio',
@@ -38,9 +37,7 @@ const FOOTER = [
   { heading: 'Contact', links: ['Enquiries', 'Instagram', 'LinkedIn'] },
 ]
 
-// -------** WebUi **---------
-// A browser window whose page scrolls inside the frame — the desktop counterpart
-// to the iOS mock, so a cell can show a website the same way another shows an app.
+// A browser window that scrolls inside the frame — the desktop counterpart to the iOS mock.
 export default function WebUi({ className = '' }) {
   return (
     <div
@@ -48,8 +45,7 @@ export default function WebUi({ className = '' }) {
     >
       <BrowserChrome />
 
-      {/* The scroll region. Focusable so it can be reached and scrolled from the
-          keyboard, not just by pointer. */}
+      {/* The scroll region — focusable so it can be reached from the keyboard too. */}
       <div
         tabIndex={0}
         role="group"
@@ -110,9 +106,7 @@ function BrowserChrome() {
   )
 }
 
-// ---------- The site itself ----------
-// Nothing in here is interactive: buttons and links are spans, so the mock never
-// becomes a set of dead tab stops inside a real page.
+// Nothing here is interactive — buttons and links are spans, not dead tab stops.
 function SiteNav() {
   return (
     <div className="sticky top-0 z-10 flex items-center gap-4 border-b border-neutral-100 bg-white/85 px-5 py-2.5 backdrop-blur">
@@ -274,8 +268,7 @@ function SiteFooter() {
   )
 }
 
-// ---------- Hint that the frame scrolls on its own ----------
-// Steps aside on hover so it never covers the page you came to read.
+// Hints that the frame scrolls on its own; steps aside on hover so it never covers the page.
 function ScrollHint() {
   return (
     <span

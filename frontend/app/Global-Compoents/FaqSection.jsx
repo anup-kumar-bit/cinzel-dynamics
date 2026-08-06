@@ -35,9 +35,7 @@ const FAQS = [
   },
 ]
 
-// -------** FaqSection **---------
-// Full-container split: the intro rail sticks on the left while the list scrolls,
-// so the answers get the whole remaining container width instead of a narrow column.
+// Intro rail sticks left while the answer list scrolls beside it.
 export default function FaqSection() {
   return (
     <section id="faq" className="px-4 py-16 sm:px-8 sm:py-20 lg:px-16">
@@ -76,10 +74,7 @@ function FaqSchema() {
   )
 }
 
-// ---------- Left rail ----------
-// No call to action here on purpose: CtaSection now sits directly underneath in
-// the layout, and two "Book a Free Consultation" buttons a screen apart is one
-// too many.
+// No CTA here on purpose — CtaSection sits right underneath, so two buttons would be one too many.
 function FaqIntro() {
   return (
     <div className="text-center lg:sticky lg:top-24 lg:self-start lg:text-left">
@@ -99,10 +94,7 @@ function FaqIntro() {
   )
 }
 
-// ---------- One disclosure row ----------
-// Native <details> keeps this keyboard- and screen-reader-friendly with no client
-// JS; the shared `name` makes the browser close the previous row when a new one
-// opens, so the list only ever has one answer expanded.
+// Native <details> needs no client JS; shared `name` keeps only one row open at a time.
 function FaqItem({ index, question, answer, open }) {
   return (
     <details

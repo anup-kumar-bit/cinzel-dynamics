@@ -39,10 +39,7 @@ export default function DemoVideoSection() {
   )
 }
 
-// ---------- Highlight card with daisyUI's 3D tilt ----------
-// `hover-3d` expects the tilting face as its first child, followed by eight
-// empty children: a 3x3 grid of hover zones minus the centre, each one driving
-// a different tilt angle, shine position and shadow offset.
+// `hover-3d` wants the tilting face first, then eight empty hover-zone children for the tilt grid.
 const TILT_ZONES = [0, 1, 2, 3, 4, 5, 6, 7]
 
 function HighlightCard({ title, copy }) {
@@ -254,9 +251,7 @@ function formatTime(seconds) {
   return `${mins}:${secs}`
 }
 
-// ---------- Icons ----------
-// The triangle is drawn with its bounding box a hair right of the viewBox
-// centre — a geometrically centred play mark reads as sitting too far left.
+// Nudged right of centre — a geometrically centred play triangle reads as too far left.
 function PlayIcon({ className }) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className={className}>

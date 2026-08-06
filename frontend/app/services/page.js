@@ -1,5 +1,6 @@
 import ServicesHero from "./ServicesHero";
 import ServiceCatalog from "./ServiceCatalog";
+import FaqSection from "../Global-Compoents/FaqSection";
 
 const SITE_URL = "https://cinzeldynamics.com";
 
@@ -54,6 +55,6 @@ export default function ServicesPage() {
       />
       <ServicesHero />
       <ServiceCatalog />
-    </>
+      <FaqSection /></>
   );
 }

@@ -52,9 +52,7 @@ export default function AndroidUi({ className = 'w-56' }) {
     }
   }
 
-  // Restart replays the boot animation rather than dropping to the off state —
-  // the power menu offers both, which is the one thing this shell does that the
-  // iOS one does not.
+  // Restart replays the boot animation — the one thing this shell offers that iOS doesn't.
   const handleRestart = () => setPhase('booting')
 
   return (

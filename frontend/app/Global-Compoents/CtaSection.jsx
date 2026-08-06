@@ -1,9 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 
-// -------** CtaSection **---------
-// Full-bleed closing band. Rendered once from the root layout, so every route
-// ends the same way: FAQ, this, then the footer.
+// Full-bleed closing band rendered once from the root layout, ending every route the same way.
 export default function CtaSection() {
   return (
     <section className="relative isolate overflow-hidden border-t border-base-200 bg-base-200/60 px-4 py-20 sm:px-8 lg:px-16">

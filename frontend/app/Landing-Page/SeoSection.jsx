@@ -81,12 +81,7 @@ function SeoGraphic() {
   )
 }
 
-// ---------- The white search-results card ----------
-// The whole sequence is CSS keyframes on a shared 9s clock (see globals.css):
-// the cursor drifts onto Search, presses, the bar loads, and the grey row in
-// position one is replaced by the client's listing with a Rank #1 badge.
-// Every animated element's *static* styling is its end state, so with
-// `prefers-reduced-motion` the card simply renders the finished result.
+// CSS keyframes on a 9s clock animate the search and swap in the Rank #1 listing; statics match reduced motion.
 function SerpMockup() {
   return (
     <div className="rounded-2xl bg-white p-4 shadow-lg sm:p-5">

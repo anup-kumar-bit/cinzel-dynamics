@@ -1,7 +1,6 @@
 import React from 'react'
 
-// Same placeholder convention as the iOS dialer — 555 numbers are reserved for
-// fictional use. Swap in the real business number here.
+// Placeholder 555 number, same convention as the iOS dialer — swap in the real one.
 const DISPLAY_NUMBER = '(555) 010-2026'
 const TEL_HREF = 'tel:+15550102026'
 
@@ -48,8 +47,7 @@ export default function AndroidDialer({ onClose }) {
         {DISPLAY_NUMBER}
       </p>
 
-      {/* Decorative, like the iOS keypad: this dialer only ever calls the one
-          number above, so the keys carry no handlers. */}
+      {/* Decorative, like the iOS keypad — the keys carry no handlers. */}
       <div className="mt-auto grid grid-cols-3 gap-y-2 px-[10%] pb-3">
         {KEYS.map((key) => (
           <span

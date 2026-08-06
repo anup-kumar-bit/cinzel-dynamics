@@ -1,8 +1,7 @@
 import React from 'react'
 import './Android-PowerMenu.css'
 
-// Restart is the row iOS does not offer here — the shell replays its boot
-// animation when it comes back. Emergency is display only.
+// Restart (iOS lacks this row) replays the boot animation; Emergency is display only.
 const ACTIONS = [
   { key: 'power-off', label: 'Power off', icon: 'icon-[lucide--power]' },
   { key: 'restart', label: 'Restart', icon: 'icon-[lucide--rotate-ccw]' },

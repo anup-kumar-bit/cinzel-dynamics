@@ -47,8 +47,7 @@ export default function IosUi({ className = 'w-56' }) {
     }
   }, [phase])
 
-  // Manual power-off: forget the boot flag too, so a refresh shows the boot
-  // screen again instead of skipping straight back to 'ready'.
+  // Forgets the boot flag too, so a refresh shows the boot screen again, not 'ready'.
   const handlePowerOff = () => {
     setPhase('off')
     try {
@@ -92,8 +91,7 @@ function BootScreen({ booting, onBoot }) {
       {booting ? (
         <>
           <div className="absolute bottom-[15%] left-1/2 h-1 w-[38%] -translate-x-1/2 overflow-hidden rounded-full bg-white/20">
-            {/* Duration comes from the same constant that schedules the phase
-                change, so the bar lands full exactly as the screen turns. */}
+            {/* Duration matches the phase-change constant so the bar fills exactly on time. */}
             <div
               className="ios-fill h-full w-full origin-left rounded-full bg-white"
               style={{ animationDuration: `${BOOT_MS}ms` }}

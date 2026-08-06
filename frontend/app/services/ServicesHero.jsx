@@ -10,13 +10,12 @@ export default function ServicesHero() {
       <div className="container relative mx-auto flex flex-col items-center text-center">
         <p className="font-opensans text-xs font-semibold tracking-widest text-base-content/45 uppercase">Services</p>
 
-        <h1 className="font-cinzel mt-4 max-w-4xl text-4xl leading-tight font-extrabold tracking-tight text-base-content uppercase sm:text-5xl md:text-6xl">
-          Name the outcome. We build the thing that gets it.
+        <h1 className="font-cinzel mt-4 text-4xl leading-tight font-extrabold tracking-tight text-base-content uppercase sm:text-5xl md:text-6xl">
+          Tell us your goal. We'll build the solution.
         </h1>
 
-        <p className="font-opensans mt-5 max-w-2xl text-sm text-base-content/60 sm:text-base">
-          Nobody wants an app. They want the bookings taken, the stock reordered, the patient followed up. Here are
-          fifteen of the jobs people actually hire us for — each with the website that ships beside it.
+        <p className="font-opensans mt-5 max-w-4xl text-sm text-base-content/60 sm:text-base">
+          You don't need an app. You need your business to run better. We build the tools that make that happen.
         </p>
 
         <div className="mt-8 flex flex-wrap items-center justify-center gap-2.5">

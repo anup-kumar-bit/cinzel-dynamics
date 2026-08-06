@@ -126,11 +126,11 @@ function HeroGraphic() {
                     <div className="animate-hero-glow motion-reduce:animate-none absolute inset-[-38%]rounded-full bg-blue-300/40 blur-2xl dark:bg-blue-500/18" />
                     <div className="relative overflow-hidden rounded-full border border-slate-900/10 bg-white shadow-xl shadow-slate-900/15">
                         <Image
-                            src="/svgs/logoA.svg"
+                            src="/images/LogoNoBg.png"
                             alt="Cinzel Dynamics"
-                            width={1254}
-                            height={1254}
-                            className="h-auto w-full object-cover"
+                            width={821}
+                            height={547}
+                            className="h-auto w-full object-contain"
                             preload
                         />
                     </div>

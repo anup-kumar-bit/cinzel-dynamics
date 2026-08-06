@@ -1,8 +1,8 @@
 import React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 
-// Rooted at `/` for the same reason as the navbar: these have to resolve from
-// the portfolio route too, not just the landing page.
+// Rooted at `/` so these links also resolve from the portfolio route, not just the landing page.
 const linkColumns = [
   {
     title: 'Services',
@@ -19,7 +19,7 @@ const linkColumns = [
     links: [
       { label: 'Our Work', href: '/portfolio' },
       { label: 'Live Demo', href: '/#demo' },
-      { label: 'Trusted By', href: '/#trust' },
+      { label: 'How We Work', href: '/trust' },
       { label: 'FAQ', href: '/#faq' },
       { label: 'Careers', href: '#' },
     ],
@@ -86,13 +86,8 @@ export default function Footer() {
 function BrandBlock() {
   return (
     <div className="max-w-sm">
-      <Link href="/" className="flex items-center gap-2">
-        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-linear-to-br from-slate-900 to-blue-600 text-sm font-bold text-white shadow-sm">
-          C
-        </span>
-        <span className="text-lg font-semibold tracking-tight text-base-content whitespace-nowrap">
-          Cinzel Dynamics
-        </span>
+      <Link href="/" className="inline-block overflow-hidden rounded-xl">
+        <Image src="/images/LogoF.png" alt="Cinzel Dynamics" width={1536} height={1024} className="h-auto w-75" />
       </Link>
 
       <p className="font-opensans mt-4 text-sm text-base-content/55">

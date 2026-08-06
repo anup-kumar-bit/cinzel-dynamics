@@ -2,9 +2,11 @@ import HeroSection from "./Landing-Page/HeroSection";
 import ServicesSection from "./Landing-Page/ServicesSection";
 import DemoVideoSection from "./Landing-Page/DemoVideoSection";
 import TrustSection from "./Landing-Page/TrustSection";
+import PortfolioTeaser from "./Landing-Page/PortfolioTeaser";
 import DomainSection from "./Landing-Page/DomainSection";
 import SeoSection from "./Landing-Page/SeoSection";
 import AiAutomationSection from "./Landing-Page/AiAutomationSection";
+import DigitalMarketingSection from "./Landing-Page/DigitalMarketingSection";
 import ClientWorkCorridor from "./Landing-Page/ClientWorkCorridor";
 
 const SITE_URL = "https://cinzeldynamics.com";
@@ -62,8 +64,11 @@ export default function Home() {
       <DomainSection />
       <ServicesSection />
       <DemoVideoSection />
+      <PortfolioTeaser />
       <SeoSection />
       <AiAutomationSection />
+       <PortfolioTeaser />
+      <DigitalMarketingSection />
       <ClientWorkCorridor />
     </>
   );

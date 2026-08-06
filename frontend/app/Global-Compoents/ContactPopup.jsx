@@ -1,83 +1,45 @@
 'use client'
 
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useState } from 'react'
+import { usePathname } from 'next/navigation'
 
-const ENDPOINT = '/api/contact'
 const FALLBACK_EMAIL = 'hello@cinzeldynamics.com'
 
-// Any link on the site can open this — `<a href="#contact">` works from server
-// components, and client code can fire `openContactPopup()`.
-export const CONTACT_HASH = '#contact'
-export const CONTACT_EVENT = 'contact:open'
-
-export function openContactPopup() {
-  window.dispatchEvent(new CustomEvent(CONTACT_EVENT))
-}
+// Opened by any `<a href="#contact">` via daisyUI's CSS `:target` modal — no JS needed.
+const MODAL_ID = 'contact'
 
 const looksLikeEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value.trim())
 const looksLikePhone = (value) => value.replace(/[^\d]/g, '').length >= 7
 
 export default function ContactPopup() {
-  const dialogRef = useRef(null)
-  const quickRef = useRef(null)
+  const pathname = usePathname()
 
   const [expanded, setExpanded] = useState(false)
   const [status, setStatus] = useState('idle')
   const [error, setError] = useState('')
 
-  const open = useCallback(() => {
-    const dialog = dialogRef.current
-    if (!dialog || dialog.open) return
-
-    dialog.showModal()
-    // The compact field is the whole point of the default state, so it takes
-    // focus rather than the close button the browser would pick.
-    requestAnimationFrame(() => quickRef.current?.focus())
-  }, [])
-
-  useEffect(() => {
-    const openFromHash = () => {
-      if (window.location.hash === CONTACT_HASH) open()
-    }
-
-    openFromHash()
-    window.addEventListener('hashchange', openFromHash)
-    window.addEventListener(CONTACT_EVENT, open)
-
-    return () => {
-      window.removeEventListener('hashchange', openFromHash)
-      window.removeEventListener(CONTACT_EVENT, open)
-    }
-  }, [open])
-
-  // Drop the hash on close, otherwise clicking the same CTA again does nothing.
-  const handleClose = () => {
-    if (window.location.hash === CONTACT_HASH) {
-      window.history.replaceState(null, '', window.location.pathname + window.location.search)
-    }
-
-    setStatus((current) => (current === 'sent' ? 'idle' : current))
+  // Clears form state after the close links drop `:target`, which CSS alone can't reset.
+  const resetForm = () => {
+    setExpanded(false)
+    setStatus('idle')
     setError('')
   }
 
-  const send = async (payload) => {
-    setStatus('sending')
+  // No backend yet — opens the visitor's email client with the details pre-filled.
+  const send = (payload) => {
     setError('')
 
-    try {
-      const response = await fetch(ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...payload, page: window.location.pathname }),
-      })
+    const subject = payload.mode === 'full' ? 'New brief from the site' : 'New callback request from the site'
+    const lines = [
+      payload.name && `Name: ${payload.name}`,
+      payload.email && `Email: ${payload.email}`,
+      payload.phone && `Phone: ${payload.phone}`,
+      payload.requirement && `Needs: ${payload.requirement}`,
+      `Page: ${pathname}`,
+    ].filter(Boolean)
 
-      if (!response.ok) throw new Error(String(response.status))
-
-      setStatus('sent')
-    } catch {
-      setStatus('idle')
-      setError(`That did not send. Email us at ${FALLBACK_EMAIL} and we will pick it up from there.`)
-    }
+    window.location.href = `mailto:${FALLBACK_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join('\n'))}`
+    setStatus('sent')
   }
 
   const handleQuickSubmit = (event) => {
@@ -133,20 +95,26 @@ export default function ContactPopup() {
   const sending = status === 'sending'
 
   return (
-    <dialog ref={dialogRef} onClose={handleClose} className="modal" aria-labelledby="contact-popup-title">
+    <div className="modal" role="dialog" id={MODAL_ID} aria-labelledby="contact-popup-title">
       <div className="modal-box max-w-lg overflow-hidden rounded-2xl border border-base-200 bg-base-100 p-0 shadow-2xl">
         <Header />
 
         <div className="p-6">
-          {status === 'sent' ? <SentState /> : (
+          {status === 'sent' ? (
+            <SentState onClose={resetForm} />
+          ) : (
             <>
-              <QuickForm inputRef={quickRef} onSubmit={handleQuickSubmit} sending={sending} />
+              {!expanded && (
+                <>
+                  <QuickForm onSubmit={handleQuickSubmit} sending={sending} />
 
-              <div className="my-5 flex items-center gap-3">
-                <span aria-hidden="true" className="h-px flex-1 bg-base-200" />
-                <span className="font-opensans text-[10px] tracking-widest text-base-content/40 uppercase">or</span>
-                <span aria-hidden="true" className="h-px flex-1 bg-base-200" />
-              </div>
+                  <div className="my-5 flex items-center gap-3">
+                    <span aria-hidden="true" className="h-px flex-1 bg-base-200" />
+                    <span className="font-opensans text-[10px] tracking-widest text-base-content/40 uppercase">or</span>
+                    <span aria-hidden="true" className="h-px flex-1 bg-base-200" />
+                  </div>
+                </>
+              )}
 
               <button
                 type="button"
@@ -156,9 +124,13 @@ export default function ContactPopup() {
                 className="font-opensans group flex w-full cursor-pointer items-center justify-between rounded-xl border border-base-200 px-4 py-3 text-left transition hover:border-emerald-300 hover:bg-emerald-50/70 dark:hover:border-emerald-800 dark:hover:bg-emerald-950/30"
               >
                 <span>
-                  <span className="block text-sm font-semibold text-base-content">Tell us what you need</span>
+                  <span className="block text-sm font-semibold text-base-content">
+                    {expanded ? 'Just leave a number or email instead' : 'Tell us what you need'}
+                  </span>
                   <span className="block text-xs text-base-content/50">
-                    Takes a minute, and the first reply is a real answer instead of a call to ask.
+                    {expanded
+                      ? 'Skip the details — we will call to get them.'
+                      : 'Takes a minute, and the first reply is a real answer instead of a call to ask.'}
                   </span>
                 </span>
 
@@ -185,20 +157,20 @@ export default function ContactPopup() {
           )}
         </div>
 
-        <form method="dialog">
-          <button
-            aria-label="Close"
-            className="absolute top-3 right-3 flex size-8 cursor-pointer items-center justify-center rounded-full bg-white/15 text-white transition hover:bg-white/25"
-          >
-            <span aria-hidden="true" className="icon-[lucide--x] size-4" />
-          </button>
-        </form>
+        <a
+          href="#_"
+          onClick={resetForm}
+          aria-label="Close"
+          className="absolute top-3 right-3 flex size-8 cursor-pointer items-center justify-center rounded-full bg-white/15 text-white transition hover:bg-white/25"
+        >
+          <span aria-hidden="true" className="icon-[lucide--x] size-4" />
+        </a>
       </div>
 
-      <form method="dialog" className="modal-backdrop">
-        <button>Close</button>
-      </form>
-    </dialog>
+      <a href="#_" onClick={resetForm} className="modal-backdrop" aria-label="Close">
+        Close
+      </a>
+    </div>
   )
 }
 
@@ -223,7 +195,7 @@ function Header() {
 }
 
 // ---------- Default state: one field, one button ----------
-function QuickForm({ inputRef, onSubmit, sending }) {
+function QuickForm({ onSubmit, sending }) {
   return (
     <form onSubmit={onSubmit} noValidate>
       <Honeypot />
@@ -234,13 +206,12 @@ function QuickForm({ inputRef, onSubmit, sending }) {
 
       <div className="mt-2 flex flex-col gap-2 sm:flex-row">
         <input
-          ref={inputRef}
           id="contact-quick"
           name="contact"
           type="text"
           inputMode="email"
           autoComplete="email"
-          placeholder="you@company.com or +91 98765 43210"
+          placeholder="you@company.com or +91 90005 40005"
           className="font-opensans input w-full rounded-full text-sm focus:border-emerald-500 focus:outline-emerald-500"
         />
 
@@ -264,13 +235,13 @@ function FullForm({ onSubmit, sending }) {
       <Honeypot />
 
       <div className="grid gap-3 sm:grid-cols-2">
-        <Field id="contact-name" name="name" label="Name" placeholder="Anup Kumar" autoComplete="name" />
+        <Field id="contact-name" name="name" label="Name" placeholder="Tony Stark" autoComplete="name" />
         <Field
           id="contact-phone"
           name="phone"
           label="Phone"
           type="tel"
-          placeholder="+91 98765 43210"
+          placeholder="+91 90002 40002"
           autoComplete="tel"
         />
       </div>
@@ -286,7 +257,7 @@ function FullForm({ onSubmit, sending }) {
 
       <div>
         <label htmlFor="contact-requirement" className="font-opensans text-xs font-semibold text-base-content">
-          What do you need built?
+           What would you like us to build? Tell us your idea—we'll make it happen.
         </label>
         <textarea
           id="contact-requirement"
@@ -341,7 +312,7 @@ function Honeypot() {
   )
 }
 
-function SentState() {
+function SentState({ onClose }) {
   return (
     <div role="status" className="flex flex-col items-center py-6 text-center">
       <span className="flex size-12 items-center justify-center rounded-full bg-emerald-500/10">
@@ -353,9 +324,9 @@ function SentState() {
         We will come back within one working day with a time that suits you.
       </p>
 
-      <form method="dialog" className="mt-5">
-        <button className="btn btn-ghost rounded-full px-6">Close</button>
-      </form>
+      <a href="#_" onClick={onClose} className="btn btn-ghost mt-5 rounded-full px-6">
+        Close
+      </a>
     </div>
   )
 }

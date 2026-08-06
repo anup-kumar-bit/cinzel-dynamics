@@ -11,10 +11,7 @@ const ENTRANCE = {
   left: 'ios-app-shot-left',
 }
 
-// `images` is { 'Screen 1': [url, url], 'Screen 2': [url] } — key order is the
-// order the screens are walked in, and each array is that screen top to bottom.
-// Shots are plain <img>: the URLs arrive at runtime, and next/image would need
-// every host declared in next.config's remotePatterns up front.
+// `images` is { 'Screen 1': [url, url], ... }; plain <img> since URLs arrive at runtime.
 export default function IOSAppInteraction({ images = {}, title = 'App', onClose }) {
   const screens = useMemo(
     () => Object.entries(images).filter(([, shots]) => Array.isArray(shots) && shots.length > 0),
@@ -58,8 +55,7 @@ export default function IOSAppInteraction({ images = {}, title = 'App', onClose 
 
   return (
     <div className="ios-wake-in absolute inset-0 overflow-hidden bg-black">
-      {/* Keyed on the pair, so React swaps the element and the entrance
-          animation runs again on every change. */}
+      {/* Keyed on the pair so React swaps the element and replays the entrance. */}
       <img
         key={`${screenIndex}-${shotIndex}`}
         src={shots[shotIndex]}
@@ -99,8 +95,7 @@ export default function IOSAppInteraction({ images = {}, title = 'App', onClose 
         </span>
       </div>
 
-      {/* Position within the current screen, kept on the left so it never
-          collides with the next-screen control opposite it. */}
+      {/* Kept on the left so it never collides with the next-screen control opposite it. */}
       {shots.length > 1 && (
         <div aria-hidden="true" className="absolute top-1/2 left-[3%] flex -translate-y-1/2 flex-col gap-1">
           {shots.map((shot, index) => (
@@ -131,8 +126,7 @@ export default function IOSAppInteraction({ images = {}, title = 'App', onClose 
         />
       )}
 
-      {/* Nothing left in either direction — offer the way back to the start
-          rather than leaving the demo parked on its last frame. */}
+      {/* Nothing left to show — offer the way back rather than parking on the last frame. */}
       {!hasNextShot && !hasNextScreen && (
         <RoundButton
           onClick={restart}

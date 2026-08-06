@@ -1,7 +1,6 @@
 import { Geist_Mono, Cinzel,Open_Sans } from "next/font/google";
 import NavBar from "./Global-Compoents/NavBar";
 import ContactPopup from "./Global-Compoents/ContactPopup";
-import FaqSection from "./Global-Compoents/FaqSection";
 import CtaSection from "./Global-Compoents/CtaSection";
 import Footer from "./Global-Compoents/Footer";
 import "./globals.css";
@@ -101,7 +100,6 @@ export default function RootLayout({ children }) {
         <NavBar/>
         <main className="flex-1">
           {children}
-          <FaqSection/>
           <CtaSection/>
         </main>
         <Footer/>

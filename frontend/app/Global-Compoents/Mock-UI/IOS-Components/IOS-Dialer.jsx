@@ -1,7 +1,6 @@
 import React from 'react'
 
-// Swap in the real business number here — this is a placeholder (555 numbers
-// are reserved for fictional use, same convention movies use).
+// Placeholder 555 number, the same convention movies use — swap in the real one.
 const DISPLAY_NUMBER = '(555) 010-2026'
 const TEL_HREF = 'tel:+15550102026'
 
@@ -49,9 +48,7 @@ export default function IosDialer({ onClose }) {
         {DISPLAY_NUMBER}
       </p>
 
-      {/* Decorative only — real iOS lets you edit the number here, but this
-          dialer always calls the one number above, so the keys don't need to
-          do anything. */}
+      {/* Decorative only — this dialer always calls the one number above. */}
       <div className="mt-auto grid grid-cols-3 gap-3 px-[8%] pb-3">
         {KEYS.map((key) => (
           <span

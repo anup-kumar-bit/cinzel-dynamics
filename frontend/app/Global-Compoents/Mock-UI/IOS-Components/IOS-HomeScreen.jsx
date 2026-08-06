@@ -8,8 +8,7 @@ import IosDialer from './IOS-Dialer'
 import IosPowerMenu from './IOS-PowerMenu'
 import './IOS-HomeScreen.css'
 
-// Stand-in shots until real captures land: keys are screens in walk order, each
-// array is that screen top to bottom. Swap this for the object you receive.
+// Stand-in shots until real captures land — swap this for the object you receive.
 const DEMO_APP_SCREENS = {
   Feed: ['https://picsum.photos/seed/cinzel-feed-a/420/910', 'https://picsum.photos/seed/cinzel-feed-b/420/910'],
   Detail: ['https://picsum.photos/seed/cinzel-detail-a/420/910', 'https://picsum.photos/seed/cinzel-detail-b/420/910'],
@@ -48,8 +47,7 @@ export default function IosHomeScreen({ className = '', onPowerOff }) {
     dialer: () => setDialerOpen(true),
   }
 
-  // Only 'power-off' does anything today — new rows added to IosPowerMenu's
-  // ACTIONS list later just add cases here.
+  // Only 'power-off' does anything today — new IosPowerMenu rows add cases here later.
   const handleSelect = (key) => {
     if (key === 'power-off') onPowerOff?.()
     setMenuOpen(false)
@@ -63,8 +61,7 @@ export default function IosHomeScreen({ className = '', onPowerOff }) {
     )
   }
 
-  // Every grid app opens the same walkthrough for now. Give an entry in
-  // HOME_APPS its own `screens` object and it takes over from the demo set.
+  // Give a HOME_APPS entry its own `screens` object to replace this demo walkthrough.
   if (openApp) {
     return (
       <div className={`absolute inset-0 ${className}`}>
