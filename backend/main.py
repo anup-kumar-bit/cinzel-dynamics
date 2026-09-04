@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.config import settings
-from app.routers import apps, auth, blog, categories, routes
+from app.routers import apps, auth, blog, categories, portfolio_stats, routes, websites
 
 logger = logging.getLogger("cinzel_api")
 
@@ -52,6 +52,8 @@ app.include_router(apps.router)
 app.include_router(routes.router)
 app.include_router(blog.router)
 app.include_router(categories.router)
+app.include_router(websites.router)
+app.include_router(portfolio_stats.router)
 
 
 @app.get("/health")

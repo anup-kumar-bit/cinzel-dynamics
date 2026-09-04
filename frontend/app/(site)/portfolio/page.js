@@ -1,5 +1,7 @@
 import PortfolioHero from "./PortfolioHero";
 import ProjectGrid from "./ProjectGrid";
+import FrameLegend from "./FrameLegend";
+import ProjectAnalysis from "./ProjectAnalysis";
 import CtaSection from "../Global-Compoents/CtaSection";
 import Footer from "../Global-Compoents/Footer";
 
@@ -16,6 +18,8 @@ export default function PortfolioPage() {
   return <>
     <PortfolioHero />
     <ProjectGrid />
+    <FrameLegend />
+    <ProjectAnalysis />
     <CtaSection />
     <Footer />
   </>;

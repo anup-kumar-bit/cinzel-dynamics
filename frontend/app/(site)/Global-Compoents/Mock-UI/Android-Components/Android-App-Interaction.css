@@ -14,6 +14,10 @@
   animation: android-app-shot-left 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
+.android-app-shot-right {
+  animation: android-app-shot-right 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
 .android-app-nudge {
   animation: android-app-nudge 1.8s ease-in-out infinite;
 }
@@ -49,6 +53,17 @@
   }
 }
 
+@keyframes android-app-shot-right {
+  from {
+    opacity: 0;
+    transform: translateX(-26%);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @keyframes android-app-nudge {
   0%,
   100% {
@@ -63,6 +78,7 @@
   .android-app-shot-in,
   .android-app-shot-up,
   .android-app-shot-left,
+  .android-app-shot-right,
   .android-app-nudge {
     animation: none;
   }

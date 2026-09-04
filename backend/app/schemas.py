@@ -63,6 +63,61 @@ class AppOut(BaseModel):
     updated_at: datetime
 
 
+# ---------- Websites ----------
+
+
+class WebsiteImage(BaseModel):
+    url: str = ""
+    # None for a pending image — its file arrives in the same multipart
+    # request under `section_{sectionIndex}_{imageIndex}`, and the router
+    # fills url/public_id back in from the Cloudinary upload result.
+    public_id: Optional[str] = None
+
+
+class WebsiteSection(BaseModel):
+    name: str = ""
+    images: List[WebsiteImage] = Field(default_factory=list)
+
+
+# The JSON half of a multipart create/update request (see the "data" field
+# parsed in routers/websites.py). Any image slot without a matching file in
+# the same request keeps whatever url/public_id it already carries here.
+class WebsiteIn(BaseModel):
+    name: str
+    domain: str = ""
+    sections: List[WebsiteSection] = Field(default_factory=list)
+
+
+class WebsiteOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    name: str
+    domain: str
+    sections: List[WebsiteSection]
+    created_at: datetime
+    updated_at: datetime
+
+
+# ---------- Portfolio stats ----------
+# Single site-wide record, not per project. Unset field = not tracked.
+
+
+class PortfolioStatsIn(BaseModel):
+    needs_fulfilled: Optional[float] = Field(default=None, ge=0, le=100)
+    satisfaction: Optional[float] = Field(default=None, ge=0, le=5)
+    on_time_delivery: Optional[float] = Field(default=None, ge=0, le=100)
+
+
+class PortfolioStatsOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    needs_fulfilled: Optional[float] = None
+    satisfaction: Optional[float] = None
+    on_time_delivery: Optional[float] = None
+    updated_at: Optional[datetime] = None
+
+
 # ---------- Routes ----------
 
 

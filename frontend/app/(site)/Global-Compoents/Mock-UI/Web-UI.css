@@ -22,6 +22,16 @@
   background: rgb(0 0 0 / 0.32);
 }
 
+/* The tab strip scrolls sideways when a frame holds more projects than fit,
+   without an OS scrollbar cutting across the tabs themselves. */
+.web-ui-tabs {
+  scrollbar-width: none;
+}
+
+.web-ui-tabs::-webkit-scrollbar {
+  display: none;
+}
+
 /* Load bar: sweeps once, then leaves. The resting style is the finished state
    (invisible), so cutting the animation never strands a blue line under the
    chrome. */

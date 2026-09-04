@@ -8,6 +8,7 @@ const ENTRANCE = {
   in: 'android-app-shot-in',
   up: 'android-app-shot-up',
   left: 'android-app-shot-left',
+  right: 'android-app-shot-right',
 }
 
 // Same shape as the iOS walkthrough: { 'Screen 1': [url, url], ... }; plain <img> since URLs arrive at runtime.
@@ -24,6 +25,7 @@ export default function AndroidAppInteraction({ images = {}, title = 'App', onCl
   const [screenName, shots] = screens[screenIndex] ?? ['', []]
   const hasNextShot = shotIndex < shots.length - 1
   const hasNextScreen = screenIndex < screens.length - 1
+  const hasPrevScreen = screenIndex > 0
 
   const showNextShot = () => {
     setEntrance('up')
@@ -33,6 +35,12 @@ export default function AndroidAppInteraction({ images = {}, title = 'App', onCl
   const showNextScreen = () => {
     setEntrance('left')
     setScreenIndex((index) => index + 1)
+    setShotIndex(0)
+  }
+
+  const showPrevScreen = () => {
+    setEntrance('right')
+    setScreenIndex((index) => index - 1)
     setShotIndex(0)
   }
 
@@ -107,8 +115,9 @@ export default function AndroidAppInteraction({ images = {}, title = 'App', onCl
         </span>
       </div>
 
+      {/* Set below center so it clears the previous/next-screen controls, which now sit on both sides at mid-height. */}
       {shots.length > 1 && (
-        <div aria-hidden="true" className="absolute top-1/2 left-[3%] flex -translate-y-1/2 flex-col gap-1">
+        <div aria-hidden="true" className="absolute top-[68%] left-[3%] flex -translate-y-1/2 flex-col gap-1">
           {shots.map((shot, index) => (
             <span
               key={`${shot}-${index}`}
@@ -116,6 +125,15 @@ export default function AndroidAppInteraction({ images = {}, title = 'App', onCl
             />
           ))}
         </div>
+      )}
+
+      {hasPrevScreen && (
+        <RoundButton
+          onClick={showPrevScreen}
+          label={`Previous screen: ${screens[screenIndex - 1][0]}`}
+          icon="icon-[lucide--chevron-left]"
+          className="top-1/2 left-[4%] -translate-y-1/2"
+        />
       )}
 
       {hasNextScreen && (

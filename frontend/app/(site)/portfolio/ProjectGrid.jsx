@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import AndroidUi from '../Global-Compoents/Mock-UI/Android-UI'
 import IosUi from '../Global-Compoents/Mock-UI/IOS-UI'
 import WebUi from '../Global-Compoents/Mock-UI/Web-UI'
-import { listPublicApps } from '@/lib/cinzelPanel/db'
+import { listPublicApps, listPublicWebsites } from '@/lib/cinzelPanel/db'
 
 // Admin app record -> home-screen tile shape the Mock-UI components expect.
 function toTile(app) {
@@ -60,6 +60,11 @@ const SERVICES = [
 export default function ProjectGrid() {
   const [iosApps, setIosApps] = useState(undefined)
   const [androidApps, setAndroidApps] = useState(undefined)
+  // Two browser frames on this page; website projects alternate between them
+  // in the order they were created (1st/3rd/5th… vs 2nd/4th/6th…) — same rule
+  // the admin preview uses — and each frame stacks the ones it holds as tabs.
+  const [websiteBoxes, setWebsiteBoxes] = useState([undefined, undefined])
+  const [websitesLoading, setWebsitesLoading] = useState(true)
 
   useEffect(() => {
     // Pass the real (possibly empty) array through, same as the admin preview —
@@ -72,6 +77,13 @@ export default function ProjectGrid() {
     listPublicApps('android')
       .then((apps) => setAndroidApps(apps.map(toTile)))
       .catch(() => setAndroidApps([]))
+
+    listPublicWebsites()
+      .then((projects) => {
+        setWebsiteBoxes([projects.filter((_, i) => i % 2 === 0), projects.filter((_, i) => i % 2 === 1)])
+      })
+      .catch(() => setWebsiteBoxes([[], []]))
+      .finally(() => setWebsitesLoading(false))
   }, [])
 
   return (
@@ -79,10 +91,7 @@ export default function ProjectGrid() {
       <div className="container mx-auto max-w-360">
 
         <div className="mt-12 grid auto-rows-[minmax(0,20rem)] gap-x-7 gap-y-6 sm:grid-cols-7 sm:grid-rows-[34rem_10rem]">
-          <div className="relative overflow-hidden rounded-2xl border border-base-200 bg-linear-to-br from-sky-200 via-indigo-200 to-slate-300 p-4 shadow-sm sm:col-span-5 sm:p-5">
-            <div aria-hidden="true" className="absolute inset-0 bg-[url('/images/noise.png')] opacity-10" />
-            <WebUi className="relative" />
-          </div>
+          <WebUi className="sm:col-span-5" projects={websiteBoxes[0]} loading={websitesLoading} />
 
           <div className="flex items-center justify-center sm:col-span-2 sm:row-span-2">
             <IosUi className="h-full sm:h-auto sm:w-full sm:max-w-84" apps={iosApps} />
@@ -91,10 +100,10 @@ export default function ProjectGrid() {
           <Cell gradient="from-amber-100 via-orange-100 to-rose-200" className="sm:col-span-5">
             <div className="flex flex-col items-center text-center">
               <span className="font-cinzel text-5xl font-extrabold tracking-tight text-slate-900 sm:text-6xl">
-                3
+                50+
               </span>
-              <span className="font-opensans mt-1.5 max-w-52 text-xs leading-snug text-slate-900/60 sm:text-sm">
-                platforms shipped from one codebase — web, iOS and Android
+              <span className="font-opensans mt-1.5 max-w-64 text-xs leading-snug whitespace-nowrap text-slate-900/60 sm:text-sm">
+                Apps and sites shipped — like the ones previewed here.
               </span>
             </div>
           </Cell>
@@ -120,12 +129,18 @@ export default function ProjectGrid() {
             <AndroidUi className="h-full sm:h-auto sm:w-full sm:max-w-81" apps={androidApps} />
           </div>
 
-          <div className="relative overflow-hidden rounded-2xl border border-base-200 bg-linear-to-br from-emerald-200 via-teal-200 to-sky-200 p-4 shadow-sm sm:col-span-5 sm:p-5">
-            <div aria-hidden="true" className="absolute inset-0 bg-[url('/images/noise.png')] opacity-10" />
-            <WebUi className="relative" />
-          </div>
+          <WebUi className="sm:col-span-5" projects={websiteBoxes[1]} loading={websitesLoading} />
 
-          <Cell label="Cell 4" gradient="from-amber-100 via-orange-100 to-rose-200" className="sm:col-span-5" />
+          <Cell gradient="from-amber-100 via-orange-100 to-rose-200" className="sm:col-span-5">
+            <div className="flex flex-col items-center text-center">
+              <span className="font-cinzel text-5xl font-extrabold tracking-tight text-slate-900 sm:text-6xl">
+                24/7
+              </span>
+              <span className="font-opensans mt-1.5 max-w-64 text-xs leading-snug whitespace-nowrap text-slate-900/60 sm:text-sm">
+                Support after launch — same team, always on.
+              </span>
+            </div>
+          </Cell>
         </div>
       </div>
     </section>

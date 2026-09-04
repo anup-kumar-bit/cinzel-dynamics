@@ -9,6 +9,7 @@ const ENTRANCE = {
   in: 'ios-app-shot-in',
   up: 'ios-app-shot-up',
   left: 'ios-app-shot-left',
+  right: 'ios-app-shot-right',
 }
 
 // `images` is { 'Screen 1': [url, url], ... }; plain <img> since URLs arrive at runtime.
@@ -25,6 +26,7 @@ export default function IOSAppInteraction({ images = {}, title = 'App', onClose 
   const [screenName, shots] = screens[screenIndex] ?? ['', []]
   const hasNextShot = shotIndex < shots.length - 1
   const hasNextScreen = screenIndex < screens.length - 1
+  const hasPrevScreen = screenIndex > 0
 
   const showNextShot = () => {
     setEntrance('up')
@@ -34,6 +36,12 @@ export default function IOSAppInteraction({ images = {}, title = 'App', onClose 
   const showNextScreen = () => {
     setEntrance('left')
     setScreenIndex((index) => index + 1)
+    setShotIndex(0)
+  }
+
+  const showPrevScreen = () => {
+    setEntrance('right')
+    setScreenIndex((index) => index - 1)
     setShotIndex(0)
   }
 
@@ -106,9 +114,9 @@ export default function IOSAppInteraction({ images = {}, title = 'App', onClose 
         </span>
       </div>
 
-      {/* Kept on the left so it never collides with the next-screen control opposite it. */}
+      {/* Set below center so it clears the previous/next-screen controls, which now sit on both sides at mid-height. */}
       {shots.length > 1 && (
-        <div aria-hidden="true" className="absolute top-1/2 left-[3%] flex -translate-y-1/2 flex-col gap-1">
+        <div aria-hidden="true" className="absolute top-[68%] left-[3%] flex -translate-y-1/2 flex-col gap-1">
           {shots.map((shot, index) => (
             <span
               key={`${shot}-${index}`}
@@ -116,6 +124,15 @@ export default function IOSAppInteraction({ images = {}, title = 'App', onClose 
             />
           ))}
         </div>
+      )}
+
+      {hasPrevScreen && (
+        <RoundButton
+          onClick={showPrevScreen}
+          label={`Previous screen: ${screens[screenIndex - 1][0]}`}
+          icon="icon-[lucide--chevron-left]"
+          className="top-1/2 left-[4%] -translate-y-1/2"
+        />
       )}
 
       {hasNextScreen && (

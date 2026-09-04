@@ -118,6 +118,115 @@ export async function deleteApp(id) {
   await apiFetch(`/apps/${id}`, { method: 'DELETE' })
 }
 
+// ---------- Websites ----------
+
+function normalizeWebsite(w) {
+  return {
+    id: w.id,
+    name: w.name,
+    domain: w.domain,
+    sections: (w.sections ?? []).map((section) => ({
+      name: section.name,
+      images: (section.images ?? []).map((image) => ({ url: image.url, publicId: image.public_id })),
+    })),
+    createdAt: w.created_at,
+    updatedAt: w.updated_at,
+  }
+}
+
+export async function listWebsites() {
+  const websites = await apiFetch('/websites')
+  return websites.map(normalizeWebsite)
+}
+
+// No-auth read for the public portfolio page — listWebsites() above hits the
+// admin-only /websites and 401s for a logged-out visitor. Ordered by
+// creation, same as listWebsites() — the two portfolio frames alternate
+// projects by this exact order (1st/3rd/5th… vs 2nd/4th/6th…).
+export async function listPublicWebsites() {
+  const websites = await apiFetch('/public/websites')
+  return websites.map(normalizeWebsite)
+}
+
+export async function saveWebsite(website) {
+  const formData = new FormData()
+
+  const sections = []
+  for (const [sectionIndex, section] of website.sections.entries()) {
+    const images = []
+    for (const [imageIndex, image] of section.images.entries()) {
+      if (isPending(image)) {
+        formData.append(`section_${sectionIndex}_${imageIndex}`, await dataUrlToBlob(image.url), 'section')
+        images.push({ url: '', public_id: null })
+      } else {
+        images.push({ url: image.url, public_id: image.publicId })
+      }
+    }
+    sections.push({ name: section.name, images })
+  }
+
+  formData.append(
+    'data',
+    JSON.stringify({
+      name: website.name,
+      domain: website.domain,
+      sections,
+    }),
+  )
+
+  const saved = website.id
+    ? await apiFetch(`/websites/${website.id}`, { method: 'PUT', body: formData })
+    : await apiFetch('/websites', { method: 'POST', body: formData })
+  return normalizeWebsite(saved)
+}
+
+export async function deleteWebsite(id) {
+  await apiFetch(`/websites/${id}`, { method: 'DELETE' })
+}
+
+// ---------- Portfolio stats ----------
+// Single site-wide record, not per website.
+
+function normalizePortfolioStats(s) {
+  return {
+    needsFulfilled: typeof s?.needs_fulfilled === 'number' ? String(s.needs_fulfilled) : '',
+    satisfaction: typeof s?.satisfaction === 'number' ? String(s.satisfaction) : '',
+    onTimeDelivery: typeof s?.on_time_delivery === 'number' ? String(s.on_time_delivery) : '',
+  }
+}
+
+function draftStringToNumber(value) {
+  return value.trim() === '' ? null : Number(value)
+}
+
+export async function getPortfolioStats() {
+  const stats = await apiFetch('/portfolio-stats')
+  return normalizePortfolioStats(stats)
+}
+
+// No-auth read for the public portfolio page.
+export async function getPublicPortfolioStats() {
+  const stats = await apiFetch('/public/portfolio-stats')
+  return {
+    needsFulfilled: stats?.needs_fulfilled ?? null,
+    satisfaction: stats?.satisfaction ?? null,
+    onTimeDelivery: stats?.on_time_delivery ?? null,
+  }
+}
+
+export async function savePortfolioStats(stats) {
+  const saved = await apiFetch('/portfolio-stats', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      needs_fulfilled: draftStringToNumber(stats.needsFulfilled),
+      satisfaction: draftStringToNumber(stats.satisfaction),
+      on_time_delivery: draftStringToNumber(stats.onTimeDelivery),
+    }),
+  })
+  return normalizePortfolioStats(saved)
+}
+
 // ---------- Routes ----------
 
 function normalizeImage(image) {
@@ -173,8 +282,12 @@ export async function getRoute(id) {
 }
 
 export async function listPublishedRoutes() {
-  const routes = await apiFetch('/public/routes')
-  return routes.map(normalizeRoute)
+  try {
+    const routes = await apiFetch('/public/routes')
+    return routes.map(normalizeRoute)
+  } catch {
+    return []
+  }
 }
 
 export async function getRouteBySlug(slug) {

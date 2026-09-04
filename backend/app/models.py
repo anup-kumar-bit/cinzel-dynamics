@@ -1,6 +1,6 @@
 import uuid
 
-from sqlalchemy import CheckConstraint, Column, DateTime, ForeignKey, Integer, String
+from sqlalchemy import CheckConstraint, Column, DateTime, Float, ForeignKey, Integer, String
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -30,6 +30,29 @@ class App(Base):
     screen_groups = Column(JSONB, nullable=False, default=list)
     sort_order = Column(Integer, nullable=False, default=0)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+
+
+class Website(Base):
+    __tablename__ = "websites"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    name = Column(String, nullable=False)
+    domain = Column(String, nullable=False, default="")
+    # [{ "name": str, "images": [{ "url": str, "public_id": str }] }]
+    sections = Column(JSONB, nullable=False, default=list)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+
+
+# Site-wide, not per project — a single row.
+class PortfolioStats(Base):
+    __tablename__ = "portfolio_stats"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    needs_fulfilled = Column(Float, nullable=True)
+    satisfaction = Column(Float, nullable=True)
+    on_time_delivery = Column(Float, nullable=True)
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
 
