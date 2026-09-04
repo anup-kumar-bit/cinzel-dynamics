@@ -3,6 +3,7 @@ export default function robots() {
     rules: {
       userAgent: "*",
       allow: "/",
+      disallow: "/cinzel-panel",
     },
     sitemap: "https://cinzeldynamics.com/sitemap.xml",
   };

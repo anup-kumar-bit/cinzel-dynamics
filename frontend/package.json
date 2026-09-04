@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "node --max-old-space-size=10240 node_modules/next/dist/bin/next dev",
     "build": "next build",
     "start": "next start"
   },
   "dependencies": {
     "daisyui": "^5.7.4",
+    "jsonwebtoken": "^9.0.3",
     "next": "16.2.12",
     "react": "19.2.4",
     "react-dom": "19.2.4"
