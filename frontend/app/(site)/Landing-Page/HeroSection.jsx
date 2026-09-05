@@ -78,7 +78,7 @@ function HeroGraphic() {
             <div className="relative mx-auto aspect-1000/445 w-full max-w-4xl">
                 <svg
                     viewBox="0 0 1000 445"
-                    className="absolute inset-0 h-full w-full text-black"
+                    className="absolute inset-0 h-full w-full text-base-content"
                     fill="none"
                     aria-hidden="true"
                 >

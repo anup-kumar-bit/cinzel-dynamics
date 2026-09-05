@@ -122,12 +122,76 @@ export default async function BlogIndexPage({ searchParams }) {
             </div>
           </div>
         ) : (
-          <p className="font-opensans mt-10 text-center text-sm text-base-content/45">
-            {activeCategory ? `No posts in “${activeCategory.name}” yet.` : 'No posts published yet.'}
-          </p>
+          <div className="mt-10 flex flex-col items-center gap-3 px-6 py-16 text-center">
+            <BlogEmptyArt className="w-40" />
+
+            <p className="font-opensans text-sm font-semibold text-base-content/70">
+              {activeCategory ? `Nothing filed under “${activeCategory.name}” yet.` : 'Nothing published yet.'}
+            </p>
+            <p className="font-opensans max-w-xs text-xs text-base-content/45">
+              New dispatches land here the moment they go live.
+            </p>
+
+            {activeCategory ? (
+              <Link
+                href="/blog"
+                className="font-mono mt-1 rounded-full bg-base-content px-4 py-1.5 text-[11px] font-bold tracking-widest text-base-100 uppercase transition hover:opacity-90"
+              >
+                View all posts
+              </Link>
+            ) : null}
+          </div>
         )}
       </div>
       </section>
     </>
+  )
+}
+
+// Blank article cards a reader is flipping through, with a few accent marks
+// scattered around — the "nothing here" beat, in the same flat linework as
+// the rest of the page rather than a stock illustration.
+function BlogEmptyArt({ className = '' }) {
+  return (
+    <svg viewBox="0 0 200 160" className={className} aria-hidden="true">
+      <ellipse cx="100" cy="92" rx="82" ry="58" className="fill-base-200" />
+
+      <g className="fill-amber-400/80">
+        <circle cx="34" cy="46" r="3" />
+        <circle cx="168" cy="120" r="2.5" />
+      </g>
+      <path
+        d="M162 44 v8 M158 48 h8"
+        className="text-violet-400/80"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M28 116 v7 M24.5 119.5 h7"
+        className="text-emerald-400/80"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+
+      <g transform="rotate(-7 90 78)">
+        <rect x="58" y="30" width="64" height="86" rx="6" className="fill-base-100 stroke-base-300" strokeWidth="1.5" />
+      </g>
+
+      <g transform="rotate(6 110 84)">
+        <rect x="76" y="36" width="64" height="86" rx="6" className="fill-base-100 stroke-base-300" strokeWidth="1.5" />
+        <rect x="86" y="48" width="30" height="6" rx="3" className="fill-base-300" />
+        <rect x="86" y="62" width="44" height="3.5" rx="1.75" className="fill-base-200" />
+        <rect x="86" y="70" width="44" height="3.5" rx="1.75" className="fill-base-200" />
+        <rect x="86" y="78" width="32" height="3.5" rx="1.75" className="fill-base-200" />
+      </g>
+
+      <g className="fill-base-content/25">
+        <circle cx="146" cy="70" r="9" />
+        <path d="M133 118c0-11.6 5.8-19 13-19s13 7.4 13 19v6h-26z" />
+        <rect x="141.5" y="86" width="9" height="18" rx="4.5" transform="rotate(28 141.5 86)" />
+      </g>
+    </svg>
   )
 }

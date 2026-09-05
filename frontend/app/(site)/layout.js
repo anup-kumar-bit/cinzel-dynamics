@@ -88,13 +88,25 @@ export const metadata = {
   },
 };
 
+// Applied before hydration so a returning dark-mode visitor never sees a
+// light flash; default (no stored choice, or "light") renders as-is.
+const THEME_INIT_SCRIPT = `
+try {
+  if (localStorage.getItem('theme') === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+  }
+} catch (e) {}
+`;
+
 export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${geistMono.variable} ${cinzel.variable} ${openSans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
         <NavBar/>
         <main className="flex-1">
           {children}

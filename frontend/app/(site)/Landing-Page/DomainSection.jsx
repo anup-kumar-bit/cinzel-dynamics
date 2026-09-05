@@ -32,7 +32,7 @@ function DomainGraphic() {
   return (
     <div className="relative mt-16 flex justify-center">
       {/* Green background */}
-      <div className="relative aspect-3/4 w-full max-w-7xl overflow-hidden rounded-2xl bg-linear-to-br from-emerald-300 via-green-500 to-green-900 sm:aspect-16/11 sm:rounded-3xl lg:aspect-[2.3/1]">
+      <div className="relative aspect-4/5 w-full max-w-7xl overflow-hidden rounded-2xl bg-linear-to-br from-emerald-300 via-green-500 to-green-900 sm:aspect-16/11 sm:rounded-3xl lg:aspect-[2.3/1]">
         {/* Noise */}
         <div className="absolute inset-0 bg-[url('/images/noise.png')] opacity-10" />
 
@@ -89,10 +89,10 @@ function DomainGraphic() {
               <p className="text-xs font-bold sm:text-3xl">
                 NYC · VIENNA
               </p>
-            </div>
 
-            {/* Portrait */}
-            <div className="absolute top-19 left-4 h-14 w-11 rounded bg-black/10 grayscale sm:top-36 sm:left-12 sm:h-40 sm:w-32 sm:rounded-md" />
+              {/* Portrait */}
+              <div className="h-14 w-11 rounded bg-black/10 grayscale sm:absolute sm:top-36 sm:left-12 sm:h-40 sm:w-32 sm:rounded-md" />
+            </div>
 
             {/* Huge Text */}
             <p

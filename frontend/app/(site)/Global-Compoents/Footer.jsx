@@ -87,7 +87,8 @@ function BrandBlock() {
   return (
     <div className="max-w-sm">
       <Link href="/" className="inline-block overflow-hidden rounded-xl">
-        <Image src="/images/LogoF.png" alt="Cinzel Dynamics" width={1536} height={1024} className="h-auto w-75" />
+        <Image src="/images/LogoF.png" alt="Cinzel Dynamics" width={1536} height={1024} className="h-auto w-75 dark:hidden" />
+        <Image src="/images/LogoF-dark.png" alt="Cinzel Dynamics" width={1536} height={1024} className="hidden h-auto w-75 dark:block" />
       </Link>
 
       <p className="font-opensans mt-4 text-sm text-base-content/55">

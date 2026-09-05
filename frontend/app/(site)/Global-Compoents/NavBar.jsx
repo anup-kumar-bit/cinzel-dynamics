@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { listPublishedRoutes } from '@/lib/cinzelPanel/db'
+import ThemeToggle from './ThemeToggle'
 
 // Hrefs are rooted at `/` so section links still work from the portfolio route.
 // Split around Services since it renders as a hover panel / expandable
@@ -21,6 +22,11 @@ const afterServicesLinks = [
 ]
 
 const CLOSE_DELAY_MS = 150
+
+// Home only matches the exact root; every other link also covers its nested routes.
+function isNavActive(pathname, href) {
+  return href === '/' ? pathname === '/' : pathname.startsWith(href)
+}
 
 export default function NavBar() {
   const [services, setServices] = useState([])
@@ -90,7 +96,15 @@ export default function NavBar() {
               alt="Cinzel Dynamics"
               width={1272}
               height={454}
-              className="h-10 w-auto sm:h-12"
+              className="h-10 w-auto dark:hidden sm:h-12"
+              priority
+            />
+            <Image
+              src="/images/LogoH-dark.png"
+              alt="Cinzel Dynamics"
+              width={1272}
+              height={454}
+              className="hidden h-10 w-auto dark:block sm:h-12"
               priority
             />
           </Link>
@@ -100,7 +114,12 @@ export default function NavBar() {
           <ul className="font-opensans menu menu-horizontal gap-1 px-1 text-md font-medium text-base-content/70">
             {beforeServicesLinks.map((link) => (
               <li key={link.label}>
-                <Link href={link.href} className="rounded-field hover:bg-base-200 hover:text-base-content">
+                <Link
+                  href={link.href}
+                  className={`rounded-field hover:bg-base-200 hover:text-base-content ${
+                    isNavActive(pathname, link.href) ? 'bg-base-200 text-base-content' : ''
+                  }`}
+                >
                   {link.label}
                 </Link>
               </li>
@@ -129,7 +148,12 @@ export default function NavBar() {
 
             {afterServicesLinks.map((link) => (
               <li key={link.label}>
-                <Link href={link.href} className="rounded-field hover:bg-base-200 hover:text-base-content">
+                <Link
+                  href={link.href}
+                  className={`rounded-field hover:bg-base-200 hover:text-base-content ${
+                    isNavActive(pathname, link.href) ? 'bg-base-200 text-base-content' : ''
+                  }`}
+                >
                   {link.label}
                 </Link>
               </li>
@@ -137,7 +161,8 @@ export default function NavBar() {
           </ul>
         </div>
 
-        <div className="navbar-end">
+        <div className="navbar-end gap-1">
+          <ThemeToggle className="btn-sm sm:btn-md" />
           <a href="#contact" className="btn btn-neutral btn-sm sm:btn-md rounded-full px-4 sm:px-5">
             Book a Demo
           </a>
@@ -153,7 +178,7 @@ export default function NavBar() {
         />
       ) : null}
 
-      <MobileDrawer open={mobileOpen} onClose={() => setMobileOpen(false)} services={services} />
+      <MobileDrawer open={mobileOpen} onClose={() => setMobileOpen(false)} services={services} pathname={pathname} />
     </div>
   )
 }
@@ -215,7 +240,7 @@ function ServicesMenu({ services, onNavigate, onMouseEnter, onMouseLeave }) {
   )
 }
 
-function MobileDrawer({ open, onClose, services }) {
+function MobileDrawer({ open, onClose, services, pathname }) {
   return (
     <>
       {open ? (
@@ -235,7 +260,8 @@ function MobileDrawer({ open, onClose, services }) {
       >
         <div className="flex items-center justify-between border-b border-base-200 px-4 py-4">
           <Link href="/" onClick={onClose} className="flex items-center">
-            <Image src="/images/LogoH.png" alt="Cinzel Dynamics" width={1272} height={454} className="h-8 w-auto" priority />
+            <Image src="/images/LogoH.png" alt="Cinzel Dynamics" width={1272} height={454} className="h-8 w-auto dark:hidden" priority />
+            <Image src="/images/LogoH-dark.png" alt="Cinzel Dynamics" width={1272} height={454} className="hidden h-8 w-auto dark:block" priority />
           </Link>
           <button
             type="button"
@@ -253,46 +279,63 @@ function MobileDrawer({ open, onClose, services }) {
               key={link.label}
               href={link.href}
               onClick={onClose}
-              className="rounded-lg px-3 py-2.5 text-sm font-semibold text-base-content/80 hover:bg-base-200"
+              className={`rounded-lg px-3 py-2.5 text-sm font-semibold hover:bg-base-200 ${
+                isNavActive(pathname, link.href) ? 'bg-base-200 text-base-content' : 'text-base-content/80'
+              }`}
             >
               {link.label}
             </Link>
           ))}
 
-          <div className="mt-2">
-            <p className="font-mono px-3 pb-2 text-[10px] font-semibold tracking-widest text-base-content/40 uppercase">
+          <details open={pathname.startsWith('/services')} className="collapse-arrow collapse rounded-lg">
+            <summary
+              className={`collapse-title min-h-0 rounded-lg px-3 py-2.5 text-sm font-semibold after:!size-3.5 hover:bg-base-200 ${
+                pathname.startsWith('/services') ? 'text-base-content' : 'text-base-content/80'
+              }`}
+            >
               Services
-            </p>
-            <div className="flex flex-col gap-0.5">
-              {services.map((service) => (
-                <Link
-                  key={service.id}
-                  href={`/services/${service.slug}`}
-                  onClick={onClose}
-                  className="rounded-lg px-3 py-2 text-sm text-base-content/65 hover:bg-base-200"
-                >
-                  {service.navName}
-                </Link>
-              ))}
+            </summary>
+
+            <div className="collapse-content !px-0 !pb-0">
+              <div className="flex flex-col gap-0.5">
+                {services.map((service) => {
+                  const href = `/services/${service.slug}`
+                  return (
+                    <Link
+                      key={service.id}
+                      href={href}
+                      onClick={onClose}
+                      className={`rounded-lg px-3 py-2 text-sm hover:bg-base-200 ${
+                        pathname === href ? 'bg-base-200 text-base-content' : 'text-base-content/65'
+                      }`}
+                    >
+                      {service.navName}
+                    </Link>
+                  )
+                })}
+              </div>
             </div>
-          </div>
+          </details>
 
           {afterServicesLinks.map((link) => (
             <Link
               key={link.label}
               href={link.href}
               onClick={onClose}
-              className="rounded-lg px-3 py-2.5 text-sm font-semibold text-base-content/80 hover:bg-base-200"
+              className={`rounded-lg px-3 py-2.5 text-sm font-semibold hover:bg-base-200 ${
+                isNavActive(pathname, link.href) ? 'bg-base-200 text-base-content' : 'text-base-content/80'
+              }`}
             >
               {link.label}
             </Link>
           ))}
         </nav>
 
-        <div className="border-t border-base-200 p-4">
-          <a href="#contact" onClick={onClose} className="btn btn-neutral w-full rounded-full">
+        <div className="flex items-center gap-2 border-t border-base-200 p-4">
+          <a href="#contact" onClick={onClose} className="btn btn-neutral flex-1 rounded-full">
             Book a Demo
           </a>
+          <ThemeToggle />
         </div>
       </aside>
     </>

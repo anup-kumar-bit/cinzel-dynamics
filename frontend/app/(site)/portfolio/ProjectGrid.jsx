@@ -90,14 +90,20 @@ export default function ProjectGrid() {
     <section id="work" className="px-4 py-16 sm:px-8 sm:py-20 lg:px-16">
       <div className="container mx-auto max-w-360">
 
-        <div className="mt-12 grid auto-rows-[minmax(0,20rem)] gap-x-7 gap-y-6 sm:grid-cols-7 sm:grid-rows-[34rem_10rem]">
+        <div className="mt-12 grid grid-rows-[24rem_30rem] gap-x-7 gap-y-6 sm:grid-cols-7 sm:grid-rows-[34rem_10rem]">
           <WebUi className="sm:col-span-5" projects={websiteBoxes[0]} loading={websitesLoading} />
 
-          <div className="flex items-center justify-center sm:col-span-2 sm:row-span-2">
-            <IosUi className="h-full sm:h-auto sm:w-full sm:max-w-84" apps={iosApps} />
+          <div className="flex items-stretch gap-2 sm:col-span-2 sm:row-span-2 sm:items-center sm:justify-center">
+            <IosUi className="h-auto w-56 shrink-0 sm:w-full sm:max-w-84" apps={iosApps} />
+
+            <div className="flex min-w-0 flex-1 flex-col justify-center gap-4 pl-2 sm:hidden">
+              <PhoneCallout icon="icon-[lucide--zap]" tint="text-amber-500" label="Smooth Performance" />
+              <PhoneCallout icon="icon-[lucide--sparkles]" tint="text-violet-500" label="Modern UI" />
+              <PhoneCallout icon="icon-[lucide--trending-up]" tint="text-emerald-500" label="Built for Scale" />
+            </div>
           </div>
 
-          <Cell gradient="from-amber-100 via-orange-100 to-rose-200" className="sm:col-span-5">
+          <Cell gradient="from-amber-100 via-orange-100 to-rose-200" className="hidden sm:col-span-5 sm:flex">
             <div className="flex flex-col items-center text-center">
               <span className="font-cinzel text-5xl font-extrabold tracking-tight text-slate-900 sm:text-6xl">
                 50+
@@ -124,14 +130,20 @@ export default function ProjectGrid() {
           ))}
         </div>
 
-        <div className="mt-14 grid auto-rows-[minmax(0,20rem)] gap-x-7 gap-y-6 sm:grid-cols-7 sm:grid-rows-[34rem_10rem]">
-          <div className="flex items-center justify-center sm:col-span-2 sm:row-span-2">
-            <AndroidUi className="h-full sm:h-auto sm:w-full sm:max-w-81" apps={androidApps} />
+        <div className="mt-14 grid grid-rows-[30rem_30rem] gap-x-7 gap-y-6 sm:grid-cols-7 sm:grid-rows-[34rem_10rem]">
+          <div className="row-start-2 flex items-stretch gap-2 sm:row-start-auto sm:col-span-2 sm:row-span-2 sm:items-center sm:justify-center">
+            <div className="flex min-w-0 flex-1 flex-col justify-center gap-4 pr-2 text-right sm:hidden">
+              <PhoneCallout reverse icon="icon-[lucide--zap]" tint="text-amber-500" label="Smooth Performance" />
+              <PhoneCallout reverse icon="icon-[lucide--sparkles]" tint="text-violet-500" label="Modern UI" />
+              <PhoneCallout reverse icon="icon-[lucide--trending-up]" tint="text-emerald-500" label="Built for Scale" />
+            </div>
+
+            <AndroidUi className="h-auto w-56 shrink-0 sm:w-full sm:max-w-81" apps={androidApps} />
           </div>
 
           <WebUi className="sm:col-span-5" projects={websiteBoxes[1]} loading={websitesLoading} />
 
-          <Cell gradient="from-amber-100 via-orange-100 to-rose-200" className="sm:col-span-5">
+          <Cell gradient="from-amber-100 via-orange-100 to-rose-200" className="hidden sm:col-span-5 sm:flex">
             <div className="flex flex-col items-center text-center">
               <span className="font-cinzel text-5xl font-extrabold tracking-tight text-slate-900 sm:text-6xl">
                 24/7
@@ -144,6 +156,15 @@ export default function ProjectGrid() {
         </div>
       </div>
     </section>
+  )
+}
+
+function PhoneCallout({ icon, tint, label, reverse = false }) {
+  return (
+    <div className={`flex items-center gap-1.5 ${reverse ? 'flex-row-reverse' : ''}`}>
+      <span aria-hidden="true" className={`${icon} size-3.5 shrink-0 ${tint}`} />
+      <span className={`font-opensans text-[10px] leading-tight font-semibold ${tint}`}>{label}</span>
+    </div>
   )
 }
 
@@ -171,31 +192,44 @@ function Cell({ label, gradient, className = '', children }) {
 
 function ServiceCard({ service }) {
   const included = service.status === 'In every build'
+  const compact = !included
 
   return (
-    <div className="group relative flex flex-col overflow-hidden rounded-2xl border border-base-200 bg-base-100 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl motion-reduce:hover:translate-y-0">
-      <div className={`relative flex items-center gap-3 overflow-hidden bg-linear-to-br ${service.gradient} p-4`}>
+    <div
+      className={`group relative flex flex-col overflow-hidden rounded-2xl border border-base-200 bg-base-100 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl motion-reduce:hover:translate-y-0 ${compact ? 'self-start sm:self-auto' : ''}`}
+    >
+      <div
+        className={`relative flex items-center gap-3 overflow-hidden bg-linear-to-br ${service.gradient} ${compact ? 'p-2.5 sm:p-4' : 'p-4'}`}
+      >
         <div aria-hidden="true" className="absolute inset-0 bg-[url('/images/noise.png')] opacity-10" />
 
-        <span className="relative flex size-10 shrink-0 items-center justify-center rounded-xl bg-white/85 shadow-sm backdrop-blur transition-transform duration-500 group-hover:scale-110 motion-reduce:group-hover:scale-100">
-          <span aria-hidden="true" className={`${service.icon} size-5 ${service.tint}`} />
+        <span
+          className={`relative flex shrink-0 items-center justify-center rounded-xl bg-white/85 shadow-sm backdrop-blur transition-transform duration-500 group-hover:scale-110 motion-reduce:group-hover:scale-100 ${compact ? 'size-7 sm:size-10' : 'size-10'}`}
+        >
+          <span aria-hidden="true" className={`${service.icon} ${compact ? 'size-3.5 sm:size-5' : 'size-5'} ${service.tint}`} />
         </span>
 
         <div className="relative min-w-0">
-          <p className="font-cinzel text-base font-extrabold tracking-tight text-slate-900">{service.name}</p>
-          <p className="font-opensans text-[10px] tracking-wide text-slate-900/55 uppercase">{service.status}</p>
+          <p className={`font-cinzel font-extrabold tracking-tight text-slate-900 ${compact ? 'text-sm sm:text-base' : 'text-base'}`}>
+            {service.name}
+          </p>
+          <p
+            className={`font-opensans text-[10px] tracking-wide text-slate-900/55 uppercase ${compact ? 'hidden sm:block' : ''}`}
+          >
+            {service.status}
+          </p>
         </div>
       </div>
 
-      <div className="flex flex-1 flex-col p-4">
-        <p className="font-opensans text-xs text-base-content/60">{service.copy}</p>
+      <div className={`flex flex-1 flex-col ${compact ? 'p-2.5 sm:p-4' : 'p-4'}`}>
+        <p className={`font-opensans text-base-content/60 ${compact ? 'text-[11px] sm:text-xs' : 'text-xs'}`}>{service.copy}</p>
 
-        <div className="mt-4 flex items-center gap-2 border-t border-base-200 pt-3">
+        <div className={`flex items-center gap-2 border-t border-base-200 ${compact ? 'mt-2.5 pt-2 sm:mt-4 sm:pt-3' : 'mt-4 pt-3'}`}>
           {service.stack.map((logo) => (
             <span
               key={logo}
               aria-hidden="true"
-              className={`${logo} size-4 opacity-70 transition-opacity duration-300 group-hover:opacity-100`}
+              className={`${logo} ${compact ? 'size-3 sm:size-4' : 'size-4'} opacity-70 transition-opacity duration-300 group-hover:opacity-100`}
             />
           ))}
 
