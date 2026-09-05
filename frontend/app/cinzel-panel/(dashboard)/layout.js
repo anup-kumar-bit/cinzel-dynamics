@@ -29,7 +29,7 @@ export default function DashboardLayout({ children }) {
   }, [pathname])
 
   async function handleLogout() {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, { method: 'POST', credentials: 'include' })
+    await fetch('/auth/logout', { method: 'POST', credentials: 'include' })
     router.push('/cinzel-panel/login')
     router.refresh()
   }

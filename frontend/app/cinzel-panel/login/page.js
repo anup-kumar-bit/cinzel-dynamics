@@ -3,8 +3,6 @@
 import { Suspense, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL
-
 export default function CinzelPanelLoginPage() {
   return (
     <Suspense fallback={null}>
@@ -27,9 +25,10 @@ function LoginForm() {
     setError('')
 
     try {
-      // Direct to the FastAPI backend (cross-origin) — it sets the session
-      // cookie itself, which proxy.js then reads on every /cinzel-panel navigation.
-      const res = await fetch(`${API_URL}/auth/login`, {
+      // Same-origin (proxied to FastAPI by next.config.mjs) so the session
+      // cookie it sets is first-party — proxy.js then reads it on every
+      // /cinzel-panel navigation.
+      const res = await fetch('/auth/login', {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },

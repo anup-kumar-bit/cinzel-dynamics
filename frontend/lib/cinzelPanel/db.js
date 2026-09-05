@@ -13,7 +13,11 @@
 // app/(site)/services/), and the same module also works from the admin
 // panel's client components.
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL
+// Server Components (public site) hit FastAPI directly — no auth cookie
+// needed there. Client Components (admin panel) go through the same-origin
+// rewrite in next.config.mjs instead, so the session cookie stays first-party
+// to this domain (see proxy.js).
+const API_URL = typeof window === 'undefined' ? process.env.NEXT_PUBLIC_API_URL : ''
 
 async function apiFetch(path, options = {}) {
   const res = await fetch(`${API_URL}${path}`, { credentials: 'include', ...options })
