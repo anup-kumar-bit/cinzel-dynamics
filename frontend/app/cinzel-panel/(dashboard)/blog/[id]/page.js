@@ -308,7 +308,9 @@ export default function BlogEditorPage({ params }) {
         </div>
 
         <div className="min-w-0">
-          <Panel icon="icon-[lucide--text]" title="Content" bodyClassName="p-6">
+          <Panel icon="icon-[lucide--text]" title="Content" bodyClassName="p-0">
+             <div className="min-w-0 w-full max-w-full overflow-hidden">
+
             <ReactQuill
               value={post.content?.[0]?.text ?? ''}
               onChange={(html) => updateField(setPost, 'content', [{ type: 'paragraph', text: html }])}
@@ -316,8 +318,9 @@ export default function BlogEditorPage({ params }) {
               theme="snow"
               modules={QUILL_MODULES}
               formats={QUILL_FORMATS}
-              className="h-[40rem] w-full"
+              className="h-[56rem]"
             />
+             </div>
           </Panel>
         </div>
       </div>
