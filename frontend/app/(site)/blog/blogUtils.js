@@ -1,12 +1,9 @@
 const WORDS_PER_MINUTE = 200
 
 export function estimateReadTime(content) {
-  const words = (content ?? [])
-    .map((block) => block.text ?? '')
-    .join(' ')
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean).length
+  const html = Array.isArray(content) ? content.map((b) => b.text ?? '').join(' ') : String(content ?? '')
+  const text = html.replace(/<[^>]*>/g, ' ')
+  const words = text.trim().split(/\s+/).filter(Boolean).length
   return Math.max(1, Math.ceil(words / WORDS_PER_MINUTE))
 }
 

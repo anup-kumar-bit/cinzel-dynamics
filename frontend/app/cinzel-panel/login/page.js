@@ -18,6 +18,7 @@ function LoginForm() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
   async function handleSubmit(event) {
     event.preventDefault()
@@ -80,18 +81,39 @@ function LoginForm() {
             />
           </label>
 
+
           <label className="mt-4 block">
             <span className="font-mono text-[10px] font-semibold tracking-widest text-base-content/45 uppercase">
               Password
             </span>
-            <input
-              type="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              required
-              className="input input-bordered mt-1.5 w-full rounded-md"
-            />
+
+            <div className="relative mt-1.5">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                required
+                className="input input-bordered w-full rounded-md pr-11"
+              />
+
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute inset-y-0 right-0 flex items-center justify-center px-3 text-base-content/50 hover:text-base-content"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                <span
+                  aria-hidden="true"
+                  className={
+                    showPassword
+                      ? 'icon-[lucide--eye-off] size-5'
+                      : 'icon-[lucide--eye] size-5'
+                  }
+                />
+              </button>
+            </div>
           </label>
+
 
           {error ? (
             <p className="mt-3 flex items-center gap-2 text-sm text-rose-600">

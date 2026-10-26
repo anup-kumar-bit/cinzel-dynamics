@@ -459,7 +459,7 @@ function normalizeBlogPost(p) {
     categoryId: p.category?.id ?? null,
     tags: p.tags ?? [],
     coverImage: p.cover_image_url ? { url: p.cover_image_url, publicId: p.cover_image_public_id } : null,
-    content: (p.content ?? []).map((block) => ({ ...block, image: normalizeImage(block.image) })),
+    content: p.content ?? [],
     status: p.status,
     createdAt: p.created_at,
     updatedAt: p.updated_at,
@@ -504,15 +504,7 @@ export async function saveBlogPost(post) {
     formData.append('cover_image', await dataUrlToBlob(post.coverImage.url), 'cover')
   }
 
-  const content = []
-  for (const [index, block] of post.content.entries()) {
-    if (block.type === 'image' && isPending(block.image)) {
-      formData.append(`block_${index}`, await dataUrlToBlob(block.image.url), 'block')
-      content.push({ ...block, image: null })
-    } else {
-      content.push({ ...block, image: block.type === 'image' ? denormalizeImage(block.image) : null })
-    }
-  }
+  const content = post.content
 
   formData.append(
     'data',

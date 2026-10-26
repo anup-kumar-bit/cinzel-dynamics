@@ -3,8 +3,10 @@
 import { use, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import dynamic from 'next/dynamic'
 import { getBlogPost, listCategories, publishBlogPost, saveBlogPost, unpublishBlogPost } from '@/lib/cinzelPanel/db'
 import { readFileAsDataUrl } from '../../../_lib/fileToDataUrl'
+import 'react-quill-new/dist/quill.snow.css'
 import {
   ErrorBanner,
   Field,
@@ -20,40 +22,42 @@ import {
   useToast,
 } from '../../../_lib/PanelUI'
 
-const BLOCK_TYPES = [
-  { id: 'paragraph', label: 'Paragraph', icon: 'icon-[lucide--pilcrow]' },
-  { id: 'heading', label: 'Heading', icon: 'icon-[lucide--heading]' },
-  { id: 'quote', label: 'Quote', icon: 'icon-[lucide--quote]' },
-  { id: 'image', label: 'Image', icon: 'icon-[lucide--image]' },
+const ReactQuill = dynamic(
+  () => import('react-quill-new').then((mod) => mod.default),
+  { ssr: false, loading: () => <p className="p-4 text-base-content/45">Loading editor…</p> },
+)
+
+const QUILL_MODULES = {
+  toolbar: [
+    [{ header: [1, 2, 3, false] }],
+    [{ 'size': ['small', false, 'large', 'huge'] }],
+    [{ color: [] }, { background: [] }],
+    ['bold', 'italic', 'underline', 'strike'],
+    [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
+    ['link', 'image', 'code-block'],
+    ['clean'],
+  ],
+}
+
+const QUILL_FORMATS = [
+  'header',
+  'font',
+  'size',
+  'bold',
+  'italic',
+  'underline',
+  'strike',
+  'blockquote',
+  'list',
+  'link',
+  'image',
+  'code-block',
+  'color',
+  'background',
 ]
 
 function updateField(setPost, field, value) {
   setPost((p) => ({ ...p, [field]: value }))
-}
-
-function updateBlock(setPost, index, patch) {
-  setPost((p) => ({ ...p, content: p.content.map((b, i) => (i === index ? { ...b, ...patch } : b)) }))
-}
-
-function addBlock(setPost, type) {
-  setPost((p) => ({
-    ...p,
-    content: [...p.content, { type, text: '', image: null, caption: '' }],
-  }))
-}
-
-function removeBlock(setPost, index) {
-  setPost((p) => ({ ...p, content: p.content.filter((_, i) => i !== index) }))
-}
-
-function moveBlock(setPost, index, delta) {
-  setPost((p) => {
-    const target = index + delta
-    if (target < 0 || target >= p.content.length) return p
-    const next = [...p.content]
-    ;[next[index], next[target]] = [next[target], next[index]]
-    return { ...p, content: next }
-  })
 }
 
 export default function BlogEditorPage({ params }) {
@@ -150,11 +154,6 @@ export default function BlogEditorPage({ params }) {
     updateField(setPost, 'coverImage', { url: await readFileAsDataUrl(file), publicId: null })
   }
 
-  async function handleBlockImage(index, file) {
-    if (!file) return
-    updateBlock(setPost, index, { image: { url: await readFileAsDataUrl(file), publicId: null } })
-  }
-
   return (
     <form onSubmit={handleSave}>
       <div className="sticky top-0 z-20 -mx-6 mb-6 border-b border-base-300 bg-base-200/95 px-6 py-3.5 backdrop-blur lg:-mx-10 lg:px-10">
@@ -208,7 +207,7 @@ export default function BlogEditorPage({ params }) {
 
       {error ? <ErrorBanner className="mb-6">{error}</ErrorBanner> : null}
 
-      <div className="grid gap-6 xl:grid-cols-[23rem_minmax(0,1fr)]">
+      <div className="grid gap-6 xl:grid-cols-[40rem_minmax(0,1fr)]">
         <div className="flex min-w-0 flex-col gap-6">
           <Panel icon="icon-[lucide--settings-2]" title="Post details" bodyClassName="flex flex-col gap-5 p-6">
             <Field label="Title">
@@ -309,41 +308,16 @@ export default function BlogEditorPage({ params }) {
         </div>
 
         <div className="min-w-0">
-          <Panel icon="icon-[lucide--text]" title="Content" meta={`${post.content.length} blocks`} bodyClassName="flex flex-col gap-4 p-6">
-            <div className="flex flex-wrap gap-2 border-b border-base-300 pb-4">
-              {BLOCK_TYPES.map((bt) => (
-                <button
-                  key={bt.id}
-                  type="button"
-                  onClick={() => addBlock(setPost, bt.id)}
-                  className="btn btn-outline btn-sm gap-1.5 rounded-lg border-base-300 px-3 font-medium text-base-content/70 hover:border-base-content/40 hover:bg-base-200"
-                >
-                  <span aria-hidden="true" className={`${bt.icon} size-3.5`} />
-                  Add {bt.label}
-                </button>
-              ))}
-            </div>
-
-            {post.content.length === 0 ? (
-              <p className="rounded-lg border border-dashed border-base-300 px-4 py-8 text-center text-xs text-base-content/45">
-                Nothing here yet. Add a block above to start writing.
-              </p>
-            ) : (
-              <div className="flex flex-col gap-3">
-                {post.content.map((block, i) => (
-                  <BlockEditor
-                    key={i}
-                    block={block}
-                    index={i}
-                    total={post.content.length}
-                    onChange={(patch) => updateBlock(setPost, i, patch)}
-                    onRemove={() => removeBlock(setPost, i)}
-                    onMove={(delta) => moveBlock(setPost, i, delta)}
-                    onImage={(file) => handleBlockImage(i, file)}
-                  />
-                ))}
-              </div>
-            )}
+          <Panel icon="icon-[lucide--text]" title="Content" bodyClassName="p-6">
+            <ReactQuill
+              value={post.content?.[0]?.text ?? ''}
+              onChange={(html) => updateField(setPost, 'content', [{ type: 'paragraph', text: html }])}
+              placeholder="Write your article…"
+              theme="snow"
+              modules={QUILL_MODULES}
+              formats={QUILL_FORMATS}
+              className="h-[40rem] w-full"
+            />
           </Panel>
         </div>
       </div>
@@ -460,89 +434,6 @@ function CategoryPicker({ categories, categoriesError, categoryId, onChange }) {
           {current.name}” is archived — it stays on this post, but can&apos;t be picked for another one.
         </p>
       ) : null}
-    </div>
-  )
-}
-
-function BlockEditor({ block, index, total, onChange, onRemove, onMove, onImage }) {
-  const meta = BLOCK_TYPES.find((bt) => bt.id === block.type) ?? BLOCK_TYPES[0]
-
-  return (
-    <div className="rounded-lg border border-base-300 bg-base-200/30 p-3.5">
-      <div className="mb-2.5 flex items-center justify-between">
-        <span className="flex items-center gap-1.5 text-[11px] font-semibold text-base-content/50">
-          <span aria-hidden="true" className={`${meta.icon} size-3.5`} />
-          {meta.label}
-          <span className="font-mono text-base-content/30">· {String(index + 1).padStart(2, '0')}</span>
-        </span>
-
-        <div className="flex items-center gap-1">
-          <button
-            type="button"
-            onClick={() => onMove(-1)}
-            disabled={index === 0}
-            aria-label="Move up"
-            className="cursor-pointer p-1 text-base-content/35 transition hover:text-base-content disabled:opacity-30"
-          >
-            <span aria-hidden="true" className="icon-[lucide--chevron-up] size-3.5" />
-          </button>
-          <button
-            type="button"
-            onClick={() => onMove(1)}
-            disabled={index === total - 1}
-            aria-label="Move down"
-            className="cursor-pointer p-1 text-base-content/35 transition hover:text-base-content disabled:opacity-30"
-          >
-            <span aria-hidden="true" className="icon-[lucide--chevron-down] size-3.5" />
-          </button>
-          <button
-            type="button"
-            onClick={onRemove}
-            aria-label={`Remove block ${index + 1}`}
-            className="cursor-pointer p-1 text-base-content/35 transition hover:text-rose-600"
-          >
-            <span aria-hidden="true" className="icon-[lucide--trash-2] size-3.5" />
-          </button>
-        </div>
-      </div>
-
-      {block.type === 'heading' ? (
-        <input
-          type="text"
-          value={block.text}
-          onChange={(e) => onChange({ text: e.target.value })}
-          placeholder="Heading text"
-          className={`${inputClass} mt-0 font-semibold`}
-        />
-      ) : block.type === 'image' ? (
-        <div className="flex flex-col gap-2.5">
-          <div className="flex items-center gap-3">
-            {block.image ? (
-              <img src={block.image.url} alt="" className="h-16 w-24 shrink-0 rounded-md border border-base-300 object-cover" />
-            ) : (
-              <span className="flex h-16 w-24 shrink-0 items-center justify-center rounded-md border border-dashed border-base-300 bg-base-100">
-                <span aria-hidden="true" className="icon-[lucide--image] size-4 text-base-content/25" />
-              </span>
-            )}
-            <FileButton label={block.image ? 'Replace' : 'Upload'} onChange={(e) => onImage(e.target.files?.[0])} />
-          </div>
-          <input
-            type="text"
-            value={block.caption}
-            onChange={(e) => onChange({ caption: e.target.value })}
-            placeholder="Caption (optional)"
-            className={`${inputClass} mt-0`}
-          />
-        </div>
-      ) : (
-        <textarea
-          value={block.text}
-          onChange={(e) => onChange({ text: e.target.value })}
-          placeholder={block.type === 'quote' ? 'Quote text' : 'Paragraph text'}
-          rows={block.type === 'quote' ? 2 : 4}
-          className={`${textareaClass} mt-0`}
-        />
-      )}
     </div>
   )
 }

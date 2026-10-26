@@ -24,7 +24,7 @@ export default async function BlogPostPage({ params }) {
   return (
     <article className="pb-20">
       <div className="px-4 pt-10 sm:px-8 lg:px-16">
-        <div className="container mx-auto max-w-6xl">
+        <div className="container mx-auto max-w-7xl">
           <Link
             href="/blog"
             className="font-opensans group inline-flex items-center gap-1.5 text-[13px] font-medium text-base-content/50 hover:text-base-content"
@@ -51,9 +51,9 @@ export default async function BlogPostPage({ params }) {
             {post.title}
           </h1>
 
-          {post.excerpt ? (
+          {/* {post.excerpt ? (
             <p className="font-opensans mt-4 text-lg leading-relaxed text-base-content/60">{post.excerpt}</p>
-          ) : null}
+          ) : null} */}
 
           <div className="mt-6 flex items-center gap-3 border-t border-base-200 pt-5">
             <span className={`flex size-8 shrink-0 items-center justify-center rounded-full text-xs font-bold ${categoryStyle.avatar}`}>
@@ -74,7 +74,7 @@ export default async function BlogPostPage({ params }) {
 
       {post.coverImage ? (
         <div className="mt-10 px-4 sm:px-8 lg:px-16">
-          <div className="container mx-auto max-w-6xl">
+          <div className="container mx-auto max-w-7xl">
             <div className="aspect-video overflow-hidden rounded-xl border border-base-200 bg-base-200">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={post.coverImage.url} alt="" className="h-full w-full object-cover" />
@@ -84,10 +84,16 @@ export default async function BlogPostPage({ params }) {
       ) : null}
 
       <div className="mt-10 px-4 sm:px-8 lg:px-16">
-        <div className="container mx-auto max-w-6xl">
-          <div className="flex flex-col gap-6">
+        <div className="container mx-auto max-w-7xl">
+          <div className="flex flex-col gap-6 blog-content">
             {post.content.map((block, index) => (
-              <ContentBlock key={index} block={block} categoryStyle={categoryStyle} />
+              <div
+                key={index}
+                className="font-opensans text-base leading-relaxed text-base-content/75 break-words [overflow-wrap:anywhere]"
+                dangerouslySetInnerHTML={{
+                  __html: block.type === 'paragraph' ? block.text : '',
+                }}
+              />
             ))}
           </div>
 
@@ -106,45 +112,5 @@ export default async function BlogPostPage({ params }) {
         </div>
       </div>
     </article>
-  )
-}
-
-function ContentBlock({ block, categoryStyle }) {
-  if (block.type === 'heading') {
-    return (
-      <h2 className="font-cinzel relative mt-4 pl-4 text-xl font-extrabold tracking-tight text-base-content sm:text-2xl">
-        <span aria-hidden="true" className={`absolute top-1 bottom-1 left-0 w-1 rounded-full ${categoryStyle.bar}`} />
-        {block.text}
-      </h2>
-    )
-  }
-
-  if (block.type === 'quote') {
-    return (
-      <blockquote className={`border-l-4 ${categoryStyle.border} pl-5 text-lg leading-relaxed text-base-content/70 italic`}>
-        {block.text}
-      </blockquote>
-    )
-  }
-
-  if (block.type === 'image') {
-    if (!block.image) return null
-    return (
-      <figure className="m-0">
-        <div className="aspect-video overflow-hidden rounded-lg border border-base-200 bg-base-200">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={block.image.url} alt={block.caption || ''} className="h-full w-full object-cover" />
-        </div>
-        {block.caption ? (
-          <figcaption className="font-opensans mt-2 text-[12px] leading-relaxed text-base-content/45">
-            {block.caption}
-          </figcaption>
-        ) : null}
-      </figure>
-    )
-  }
-
-  return (
-    <p className="font-opensans text-base leading-relaxed whitespace-pre-line text-base-content/75">{block.text}</p>
   )
 }
