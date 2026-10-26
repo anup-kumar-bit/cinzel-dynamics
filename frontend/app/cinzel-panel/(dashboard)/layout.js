@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 const NAV_LINKS = [
+  { label: 'Enquiries', href: '/cinzel-panel/demo-requests', icon: 'icon-[lucide--mail]', hint: 'Enquiries from the site' },
   { label: 'Apps', href: '/cinzel-panel/apps', icon: 'icon-[lucide--smartphone]', hint: 'Portfolio mockups' },
   { label: 'Websites', href: '/cinzel-panel/websites', icon: 'icon-[lucide--globe]', hint: 'Portfolio mockups' },
   { label: 'Routes', href: '/cinzel-panel/routes', icon: 'icon-[lucide--layout-template]', hint: 'Service pages' },

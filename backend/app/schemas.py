@@ -244,3 +244,37 @@ class BlogPostOut(BaseModel):
     created_at: datetime
     updated_at: datetime
     published_at: Optional[datetime] = None
+
+
+# ---------- Demo request ----------
+
+
+class DemoRequestIn(BaseModel):
+    name: str
+    email: EmailStr
+    company: Optional[str] = None
+    phone: Optional[str] = None
+    message: Optional[str] = None
+
+
+class DemoRequestOut(BaseModel):
+    ok: bool
+
+
+# ---------- Demo request (admin list) ----------
+
+
+class DemoRequestListItem(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    name: str
+    email: str
+    company: Optional[str] = None
+    phone: Optional[str] = None
+    message: Optional[str] = None
+    created_at: datetime
+
+
+class DemoRequestList(BaseModel):
+    items: List[DemoRequestListItem]

@@ -19,5 +19,11 @@ class Settings(BaseSettings):
 
     is_production: bool = False
 
+    # Resend email (demo requests / notifications)
+    resend_api_key: str = ""
+    resend_from: str = "Demo Requests <onboarding@resend.dev>"
+    # Comma-separated list of emails to notify (e.g. "you@domain.com,partner@domain.com")
+    demo_notify_to: str = ""
+
 
 settings = Settings()

@@ -124,3 +124,15 @@ class BlogPost(Base):
     published_at = Column(DateTime(timezone=True), nullable=True)
 
     category = relationship("Category")
+
+
+class DemoRequest(Base):
+    __tablename__ = "demo_requests"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    name = Column(String, nullable=False)
+    email = Column(String, nullable=False)
+    company = Column(String, nullable=True)
+    phone = Column(String, nullable=True)
+    message = Column(String, nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())

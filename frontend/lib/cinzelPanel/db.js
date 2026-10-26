@@ -1,22 +1,3 @@
-// Real API client for the FastAPI backend (see backend/app) — no more
-// IndexedDB. Function names/shapes match what they were as an IndexedDB
-// client on purpose, so call sites barely changed; only the image fields
-// (icon, screen images, heroImage, section images) changed shape, from a
-// plain data-URL string to `{ url, publicId }`, since a saved image is now a
-// real Cloudinary URL that needs its publicId remembered for later deletes.
-// A `url` starting with `data:` means "not uploaded yet" — that's what
-// save() looks for to know which images to attach as files.
-//
-// No 'use client' — `fetch`/`FormData`/`Blob` are all available in Next's
-// server runtime too, so this file is isomorphic on purpose: the read
-// functions run in real Server Components on the public site (see
-// app/(site)/services/), and the same module also works from the admin
-// panel's client components.
-
-// Server Components (public site) hit FastAPI directly — no auth cookie
-// needed there. Client Components (admin panel) go through the same-origin
-// rewrite in next.config.mjs instead, so the session cookie stays first-party
-// to this domain (see proxy.js).
 const API_URL = typeof window === 'undefined' ? process.env.NEXT_PUBLIC_API_URL : ''
 
 async function apiFetch(path, options = {}) {
@@ -541,4 +522,26 @@ export async function publishBlogPost(id) {
 export async function unpublishBlogPost(id) {
   const saved = await apiFetch(`/blog-posts/${id}/unpublish`, { method: 'PATCH' })
   return normalizeBlogPost(saved)
+}
+
+
+function normalizeDemoRequest(p) {
+  return {
+    id: p.id,
+    name: p.name,
+    email: p.email,
+    company: p.company ?? null,
+    phone: p.phone ?? null,
+    message: p.message ?? null,
+    createdAt: p.created_at,
+  }
+}
+
+export async function listDemoRequests() {
+  const { items } = await apiFetch('/demo-requests')
+  return items.map(normalizeDemoRequest)
+}
+
+export async function deleteDemoRequest(id) {
+  await apiFetch(`/demo-requests/${id}`, { method: 'DELETE' })
 }

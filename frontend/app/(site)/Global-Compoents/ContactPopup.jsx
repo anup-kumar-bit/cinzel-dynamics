@@ -2,14 +2,11 @@
 
 import React, { useState } from 'react'
 import { usePathname } from 'next/navigation'
+import { looksLikeEmail, looksLikePhone, validateEmail, validatePhone } from '@/lib/validation'
 
-const FALLBACK_EMAIL = 'hello@cinzeldynamics.com'
+const API_URL = typeof window === 'undefined' ? '' : process.env.NEXT_PUBLIC_API_URL || ''
 
-// Opened by any `<a href="#contact">` via daisyUI's CSS `:target` modal — no JS needed.
 const MODAL_ID = 'contact'
-
-const looksLikeEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value.trim())
-const looksLikePhone = (value) => value.replace(/[^\d]/g, '').length >= 7
 
 export default function ContactPopup() {
   const pathname = usePathname()
@@ -18,31 +15,44 @@ export default function ContactPopup() {
   const [status, setStatus] = useState('idle')
   const [error, setError] = useState('')
 
-  // Clears form state after the close links drop `:target`, which CSS alone can't reset.
   const resetForm = () => {
     setExpanded(false)
     setStatus('idle')
     setError('')
   }
 
-  // No backend yet — opens the visitor's email client with the details pre-filled.
-  const send = (payload) => {
-    setError('')
-
-    const subject = payload.mode === 'full' ? 'New brief from the site' : 'New callback request from the site'
-    const lines = [
-      payload.name && `Name: ${payload.name}`,
-      payload.email && `Email: ${payload.email}`,
-      payload.phone && `Phone: ${payload.phone}`,
-      payload.requirement && `Needs: ${payload.requirement}`,
-      `Page: ${pathname}`,
-    ].filter(Boolean)
-
-    window.location.href = `mailto:${FALLBACK_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join('\n'))}`
-    setStatus('sent')
+  const apiBookDemo = async (payload) => {
+    const res = await fetch(`${API_URL}/book-demo`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}))
+      throw new Error(body.detail || 'Could not send request. Please try again.')
+    }
+    return res.json()
   }
 
-  const handleQuickSubmit = (event) => {
+  const send = async (payload) => {
+    setError('')
+    setStatus('sending')
+
+    try {
+      await apiBookDemo({
+        name: payload.name || '',
+        email: payload.email || '',
+        phone: payload.phone || '',
+        message: payload.message || `New contact from ${pathname}`,
+      })
+      setStatus('sent')
+    } catch (err) {
+      setStatus('idle')
+      setError(err.message || 'Something went wrong. Please try again.')
+    }
+  }
+
+  const handleQuickSubmit = async (event) => {
     event.preventDefault()
 
     const data = new FormData(event.currentTarget)
@@ -51,19 +61,26 @@ export default function ContactPopup() {
     const contact = String(data.get('contact') ?? '').trim()
     const isEmail = looksLikeEmail(contact)
 
+    if (!contact) {
+      setError('Please enter your email or phone number.')
+      return
+    }
+
     if (!isEmail && !looksLikePhone(contact)) {
-      setError('Give us a phone number or an email address we can actually reach.')
+      setError('Enter a valid email address or phone number.')
       return
     }
 
     send({
       mode: 'quick',
+      name: '',
       email: isEmail ? contact : '',
-      phone: isEmail ? '' : contact,
+      phone: isEmail ? '' : contact.replace(/[^\d]/g, ''),
+      message: 'Contacted by Email- Need to reach out !! ',
     })
   }
 
-  const handleFullSubmit = (event) => {
+  const handleFullSubmit = async (event) => {
     event.preventDefault()
 
     const data = new FormData(event.currentTarget)
@@ -79,8 +96,21 @@ export default function ContactPopup() {
       return
     }
 
-    if (!looksLikeEmail(email) && !looksLikePhone(phone)) {
-      setError('Leave either an email address or a phone number so we can answer.')
+    const emailError = validateEmail(email)
+    const phoneError = validatePhone(phone)
+
+    if (email && emailError) {
+      setError(emailError)
+      return
+    }
+
+    if (phone && phoneError) {
+      setError(phoneError)
+      return
+    }
+
+    if (!email && !phone) {
+      setError('Provide either a valid email address or a phone number.')
       return
     }
 
@@ -89,7 +119,13 @@ export default function ContactPopup() {
       return
     }
 
-    send({ mode: 'full', name, email, phone, requirement })
+    send({
+      mode: 'full',
+      name,
+      email,
+      phone,
+      message: requirement,
+    })
   }
 
   const sending = status === 'sending'
@@ -118,7 +154,10 @@ export default function ContactPopup() {
 
               <button
                 type="button"
-                onClick={() => setExpanded((value) => !value)}
+                onClick={() => {
+                  setError('')
+                  setExpanded((value) => !value)
+                }}
                 aria-expanded={expanded}
                 aria-controls="contact-full-form"
                 className="font-opensans group flex w-full cursor-pointer items-center justify-between rounded-xl border border-base-200 px-4 py-3 text-left transition hover:border-emerald-300 hover:bg-emerald-50/70 dark:hover:border-emerald-800 dark:hover:bg-emerald-950/30"
@@ -201,17 +240,20 @@ function QuickForm({ onSubmit, sending }) {
       <Honeypot />
 
       <label htmlFor="contact-quick" className="font-opensans text-xs font-semibold text-base-content">
-        Phone or email
+        Email
       </label>
 
       <div className="mt-2 flex flex-col gap-2 sm:flex-row">
         <input
           id="contact-quick"
           name="contact"
-          type="text"
-          inputMode="email"
-          autoComplete="email"
-          placeholder="you@company.com or +91 90005 40005"
+          type="tel"
+          inputMode="tel"
+          autoComplete="tel"
+          placeholder="you@company.com"
+          pattern="[0-9+\\s\\-()]{7,15}"
+          minLength="7"
+          maxLength="25"
           className="font-opensans input w-full rounded-full text-sm focus:border-emerald-500 focus:outline-emerald-500"
         />
 
@@ -241,8 +283,16 @@ function FullForm({ onSubmit, sending }) {
           name="phone"
           label="Phone"
           type="tel"
+          inputMode="tel"
           placeholder="+91 90002 40002"
           autoComplete="tel"
+          pattern="[0-9+\\s\\-()]{7,15}"
+          minLength="7"
+          maxLength="25"
+          onKeyPress={(e) => {
+            const ch = e.key
+            if (!/^[0-9+()\s\-]$/.test(ch)) e.preventDefault()
+          }}
         />
       </div>
 
@@ -251,6 +301,7 @@ function FullForm({ onSubmit, sending }) {
         name="email"
         label="Email"
         type="email"
+        inputMode="email"
         placeholder="you@company.com"
         autoComplete="email"
       />
@@ -280,7 +331,7 @@ function FullForm({ onSubmit, sending }) {
   )
 }
 
-function Field({ id, name, label, type = 'text', placeholder, autoComplete }) {
+function Field({ id, name, label, type = 'text', inputMode, placeholder, autoComplete, pattern, minLength, maxLength, onKeyPress }) {
   return (
     <div>
       <label htmlFor={id} className="font-opensans text-xs font-semibold text-base-content">
@@ -290,8 +341,13 @@ function Field({ id, name, label, type = 'text', placeholder, autoComplete }) {
         id={id}
         name={name}
         type={type}
+        inputMode={inputMode}
         placeholder={placeholder}
         autoComplete={autoComplete}
+        pattern={pattern}
+        minLength={minLength}
+        maxLength={maxLength}
+        onKeyPress={onKeyPress}
         className="font-opensans input mt-1.5 w-full rounded-xl text-sm focus:border-emerald-500 focus:outline-emerald-500"
       />
     </div>
