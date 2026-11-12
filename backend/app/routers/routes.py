@@ -94,6 +94,12 @@ def get_route(route_id: uuid.UUID, db: Session = Depends(get_db), _admin: AdminU
     return route
 
 
+def _conflict_detail(exc: IntegrityError, slug: str) -> str:
+    if "ck_routes_template" in str(exc.orig):
+        return "This template isn't allowed by the database yet; run the latest migration"
+    return f"Slug '{slug}' is already in use"
+
+
 @router.post("/routes", response_model=RouteOut, status_code=201)
 async def create_route(
     request: Request, db: Session = Depends(get_db), _admin: AdminUser = Depends(get_current_admin)
@@ -104,9 +110,9 @@ async def create_route(
     db.add(route)
     try:
         db.commit()
-    except IntegrityError:
+    except IntegrityError as exc:
         db.rollback()
-        raise HTTPException(status_code=409, detail=f"Slug '{payload.slug}' is already in use")
+        raise HTTPException(status_code=409, detail=_conflict_detail(exc, payload.slug))
     db.refresh(route)
     return route
 
@@ -128,9 +134,9 @@ async def update_route(
         setattr(route, key, value)
     try:
         db.commit()
-    except IntegrityError:
+    except IntegrityError as exc:
         db.rollback()
-        raise HTTPException(status_code=409, detail=f"Slug '{payload.slug}' is already in use")
+        raise HTTPException(status_code=409, detail=_conflict_detail(exc, payload.slug))
     db.refresh(route)
     return route
 
