@@ -59,7 +59,7 @@ class PortfolioStats(Base):
 class Route(Base):
     __tablename__ = "routes"
     __table_args__ = (
-        CheckConstraint("template IN ('feature-split', 'story', 'card-grid')", name="ck_routes_template"),
+        CheckConstraint("template IN ('feature-split', 'story', 'card-grid', 'custom')", name="ck_routes_template"),
         CheckConstraint("status IN ('draft', 'published')", name="ck_routes_status"),
     )
 

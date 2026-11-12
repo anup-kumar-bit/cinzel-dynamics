@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import 'react-quill-new/dist/quill.snow.css'
 import { getBlogPostBySlug } from '@/lib/cinzelPanel/db'
 import { estimateReadTime, formatDate, formatDateTime, getCategoryStyle, wasEditedAfterPublish } from '../blogUtils'
 
@@ -85,11 +86,11 @@ export default async function BlogPostPage({ params }) {
 
       <div className="mt-10 px-4 sm:px-8 lg:px-16">
         <div className="container mx-auto max-w-7xl">
-          <div className="flex flex-col gap-6 blog-content">
+          <div className="ql-snow font-opensans flex flex-col gap-6 text-base text-base-content">
             {post.content.map((block, index) => (
               <div
                 key={index}
-                className="font-opensans text-base leading-relaxed text-base-content/75 break-words [overflow-wrap:anywhere]"
+                className="ql-editor overflow-visible! p-0! [overflow-wrap:anywhere]"
                 dangerouslySetInnerHTML={{
                   __html: block.type === 'paragraph' ? block.text : '',
                 }}

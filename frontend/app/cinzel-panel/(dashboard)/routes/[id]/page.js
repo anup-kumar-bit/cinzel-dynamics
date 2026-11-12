@@ -3,10 +3,13 @@
 import { use, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import dynamic from 'next/dynamic'
 import { getRoute, publishRoute, saveRoute, unpublishRoute } from '@/lib/cinzelPanel/db'
 import { SERVICE_TEMPLATES, getTemplate } from '@/app/_shared/service-templates/registry'
 import { readFileAsDataUrl } from '../../../_lib/fileToDataUrl'
 import ScaledPreview from '../../../_lib/ScaledPreview'
+import ServiceHeroBackdrop from '@/app/_shared/service-templates/ServiceHeroBackdrop'
+import 'react-quill-new/dist/quill.snow.css'
 import {
   ErrorBanner,
   Field,
@@ -20,6 +23,23 @@ import {
   useConfirm,
   useToast,
 } from '../../../_lib/PanelUI'
+
+const ReactQuill = dynamic(
+  () => import('react-quill-new').then((mod) => mod.default),
+  { ssr: false, loading: () => <p className="p-4 text-base-content/45">Loading editor…</p> },
+)
+
+const QUILL_MODULES = {
+  toolbar: [
+    [{ header: [1, 2, 3, false] }],
+    [{ size: ['small', false, 'large', 'huge'] }],
+    [{ color: [] }, { background: [] }],
+    ['bold', 'italic', 'underline', 'strike'],
+    [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
+    ['link', 'image', 'code-block'],
+    ['clean'],
+  ],
+}
 
 function updateField(setRoute, field, value) {
   setRoute((r) => ({ ...r, [field]: value }))
@@ -67,6 +87,7 @@ export default function RouteEditorPage({ params }) {
   // Set by clicking either its spot in the form or in the live preview, so
   // the two stay in sync.
   const [activeTarget, setActiveTarget] = useState(null)
+  const [previewOpen, setPreviewOpen] = useState(false)
   const { confirm, confirmDialog } = useConfirm()
   const { showToast, toastNode } = useToast()
 
@@ -223,150 +244,305 @@ export default function RouteEditorPage({ params }) {
 
       {error ? <ErrorBanner className="mb-6">{error}</ErrorBanner> : null}
 
-      <div className="grid gap-6 xl:grid-cols-[23rem_minmax(0,1fr)]">
-        <div className="flex min-w-0 flex-col gap-6">
-          <Panel icon="icon-[lucide--layers]" title="Template" bodyClassName="flex flex-col gap-2 p-4">
-            {SERVICE_TEMPLATES.map((t) => {
-              const selected = route.template === t.id
-              return (
-                <button
-                  key={t.id}
-                  type="button"
-                  onClick={() => handleTemplateChange(t.id)}
-                  className={`cursor-pointer rounded-lg border p-3.5 text-left transition ${
-                    selected
-                      ? 'border-base-content bg-base-200/60'
-                      : 'border-base-300 hover:border-base-content/35 hover:bg-base-200/30'
-                  }`}
-                >
-                  <span className="flex items-center justify-between gap-2">
-                    <span className="text-sm font-bold text-base-content">{t.label}</span>
-                    <span
-                      className={`flex size-4 shrink-0 items-center justify-center rounded-full border ${
-                        selected ? 'border-base-content bg-base-content' : 'border-base-300'
-                      }`}
-                    >
-                      {selected ? (
-                        <span aria-hidden="true" className="icon-[lucide--check] size-2.5 text-base-100" />
-                      ) : null}
-                    </span>
-                  </span>
-                  <span className="mt-1 block text-[11px] leading-relaxed text-base-content/50">{t.description}</span>
-                </button>
-              )
-            })}
-          </Panel>
+      {route.template === 'custom' ? (
+        <>
+          {/* Row 1: Template selection + Page details side by side */}
+          <div className="grid gap-6 xl:grid-cols-[23rem_minmax(0,1fr)]">
+            <TemplatePicker value={route.template} onChange={handleTemplateChange} />
 
-          <Panel icon="icon-[lucide--settings-2]" title="Page details" bodyClassName="flex flex-col gap-5 p-6">
-            <Field label="Nav name" hint="Shown in the services list.">
-              <input
-                type="text"
-                value={route.navName}
-                onChange={(e) => updateField(setRoute, 'navName', e.target.value)}
-                required
-                className={inputClass}
-              />
-            </Field>
+            <Panel
+              icon="icon-[lucide--settings-2]"
+              title="Page details"
+              bodyClassName="grid content-start gap-5 p-6 md:grid-cols-3"
+            >
+              <Field label="Nav name" hint="Shown in the services list.">
+                <input
+                  type="text"
+                  value={route.navName}
+                  onChange={(e) => updateField(setRoute, 'navName', e.target.value)}
+                  required
+                  className={inputClass}
+                />
+              </Field>
 
-            <Field label="Page title" hint="Used as the browser tab title.">
-              <input
-                type="text"
-                value={route.title}
-                onChange={(e) => updateField(setRoute, 'title', e.target.value)}
-                required
-                className={inputClass}
-              />
-            </Field>
+              <Field label="Page title" hint="Used as the browser tab title.">
+                <input
+                  type="text"
+                  value={route.title}
+                  onChange={(e) => updateField(setRoute, 'title', e.target.value)}
+                  required
+                  className={inputClass}
+                />
+              </Field>
 
-            <Field label="Slug" hint={`Lives at /services/${route.slug || '…'}`}>
-              <input
-                type="text"
-                value={route.slug}
-                onChange={(e) =>
-                  updateField(setRoute, 'slug', e.target.value.trim().toLowerCase().replace(/[^a-z0-9-]+/g, '-'))
-                }
-                required
-                className={`${inputClass} font-mono`}
-              />
-            </Field>
-          </Panel>
+              <Field label="Slug" hint={`Lives at /services/${route.slug || '…'}`}>
+                <input
+                  type="text"
+                  value={route.slug}
+                  onChange={(e) =>
+                    updateField(setRoute, 'slug', e.target.value.trim().toLowerCase().replace(/[^a-z0-9-]+/g, '-'))
+                  }
+                  required
+                  className={`${inputClass} font-mono`}
+                />
+              </Field>
+            </Panel>
+          </div>
 
+          {/* Row 2: Quill editor with gradient background */}
           <Panel
             icon="icon-[lucide--text]"
             title="Content"
-            meta={template.label}
-            bodyClassName="flex flex-col gap-5 p-6"
-          >
-            <TemplateContentForm
-              route={route}
-              setRoute={setRoute}
-              activeTarget={activeTarget}
-              setActiveTarget={setActiveTarget}
-            />
-          </Panel>
-
-          <Panel icon="icon-[lucide--mouse-pointer-click]" title="Call to action" bodyClassName="p-6">
-            <CtaFields
-              content={route.content ?? {}}
-              setRoute={setRoute}
-              activeTarget={activeTarget}
-              setActiveTarget={setActiveTarget}
-            />
-          </Panel>
-        </div>
-
-        <div className="min-w-0 xl:sticky xl:top-28 xl:self-start">
-          <Panel
-            icon="icon-[lucide--eye]"
-            title="Live preview"
             actions={
-              route.status === 'published' ? (
-                <a
-                  href={`/services/${route.slug}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center gap-1.5 text-[11px] font-semibold text-base-content/60 hover:text-base-content"
-                >
-                  Open live
-                  <span aria-hidden="true" className="icon-[lucide--external-link] size-3" />
-                </a>
-              ) : null
+              <button
+                type="button"
+                onClick={() => setPreviewOpen(true)}
+                className="btn btn-outline btn-sm gap-1.5 rounded-lg border-base-300 px-3 font-medium text-base-content/70 hover:border-base-content/40 hover:bg-base-200"
+              >
+                <span aria-hidden="true" className="icon-[lucide--eye] size-3.5" />
+                Preview
+              </button>
             }
-            bodyClassName=""
+            bodyClassName="p-0"
+            className="mt-6 bg-transparent"
           >
-            <div className="flex items-center gap-2 border-b border-base-300 bg-base-200/40 px-4 py-2.5">
-              <span className="flex gap-1.5">
-                <span aria-hidden="true" className="size-2.5 rounded-full bg-base-300" />
-                <span aria-hidden="true" className="size-2.5 rounded-full bg-base-300" />
-                <span aria-hidden="true" className="size-2.5 rounded-full bg-base-300" />
-              </span>
-              <span className="font-mono ml-2 truncate rounded-md bg-base-100 px-3 py-1 text-[11px] text-base-content/50">
-                cinzeldynamics.com/services/{route.slug}
-              </span>
-            </div>
-
-            <div className="max-h-[calc(100vh-12rem)] overflow-auto bg-base-100 p-2">
-              <ScaledPreview>
-                <template.Component
-                  content={route.content}
-                  activeIndex={typeof activeTarget === 'number' ? activeTarget : null}
-                  onSelectItem={setActiveTarget}
-                  onDeleteItem={(i) => {
-                    removeArrayItem(setRoute, arrayField, i)
-                    setActiveTarget(null)
-                  }}
-                  activeField={typeof activeTarget === 'string' ? activeTarget : null}
-                  onSelectField={setActiveTarget}
-                />
-              </ScaledPreview>
+            <div className="flex min-w-0 w-full overflow-hidden">
+                <div className="relative h-[calc(100vh-22rem)] w-full overflow-hidden bg-transparent">
+                <ServiceHeroBackdrop />
+                <div className="custom-editor font-opensans relative z-10 h-full w-full overflow-auto p-6 bg-transparent">
+                  <ReactQuill
+                    value={route.content?.body ?? ''}
+                    onChange={(html) => updateContentField(setRoute, 'body', html)}
+                    placeholder="Write your page content…"
+                    theme="snow"
+                    modules={QUILL_MODULES}
+                    useSemanticHTML={false}
+                    className="h-full w-full bg-transparent"
+                  />
+                </div>
+              </div>
             </div>
           </Panel>
+
+          {previewOpen ? (
+            <PreviewDialog route={route} onClose={() => setPreviewOpen(false)}>
+              <template.Component content={route.content} />
+            </PreviewDialog>
+          ) : null}
+        </>
+      ) : (
+        <div className="grid gap-6 xl:grid-cols-[23rem_minmax(0,1fr)]">
+          <div className="flex min-w-0 flex-col gap-6">
+            <TemplatePicker value={route.template} onChange={handleTemplateChange} />
+
+            <Panel icon="icon-[lucide--settings-2]" title="Page details" bodyClassName="flex flex-col gap-5 p-6">
+              <Field label="Nav name" hint="Shown in the services list.">
+                <input
+                  type="text"
+                  value={route.navName}
+                  onChange={(e) => updateField(setRoute, 'navName', e.target.value)}
+                  required
+                  className={inputClass}
+                />
+              </Field>
+
+              <Field label="Page title" hint="Used as the browser tab title.">
+                <input
+                  type="text"
+                  value={route.title}
+                  onChange={(e) => updateField(setRoute, 'title', e.target.value)}
+                  required
+                  className={inputClass}
+                />
+              </Field>
+
+              <Field label="Slug" hint={`Lives at /services/${route.slug || '…'}`}>
+                <input
+                  type="text"
+                  value={route.slug}
+                  onChange={(e) =>
+                    updateField(setRoute, 'slug', e.target.value.trim().toLowerCase().replace(/[^a-z0-9-]+/g, '-'))
+                  }
+                  required
+                  className={`${inputClass} font-mono`}
+                />
+              </Field>
+            </Panel>
+
+            <Panel
+              icon="icon-[lucide--text]"
+              title="Content"
+              meta={template.label}
+              bodyClassName="flex flex-col gap-5 p-6"
+            >
+              <TemplateContentForm
+                route={route}
+                setRoute={setRoute}
+                activeTarget={activeTarget}
+                setActiveTarget={setActiveTarget}
+              />
+            </Panel>
+
+            <Panel icon="icon-[lucide--mouse-pointer-click]" title="Call to action" bodyClassName="p-6">
+              <CtaFields
+                content={route.content ?? {}}
+                setRoute={setRoute}
+                activeTarget={activeTarget}
+                setActiveTarget={setActiveTarget}
+              />
+            </Panel>
+          </div>
+
+          <div className="min-w-0 xl:sticky xl:top-28 xl:self-start">
+            <Panel
+              icon="icon-[lucide--eye]"
+              title="Live preview"
+              actions={
+                route.status === 'published' ? (
+                  <a
+                    href={`/services/${route.slug}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-1.5 text-[11px] font-semibold text-base-content/60 hover:text-base-content"
+                  >
+                    Open live
+                    <span aria-hidden="true" className="icon-[lucide--external-link] size-3" />
+                  </a>
+                ) : null
+              }
+              bodyClassName=""
+            >
+              <div className="flex items-center gap-2 border-b border-base-300 bg-base-200/40 px-4 py-2.5">
+                <span className="flex gap-1.5">
+                  <span aria-hidden="true" className="size-2.5 rounded-full bg-base-300" />
+                  <span aria-hidden="true" className="size-2.5 rounded-full bg-base-300" />
+                  <span aria-hidden="true" className="size-2.5 rounded-full bg-base-300" />
+                </span>
+                <span className="font-mono ml-2 truncate rounded-md bg-base-100 px-3 py-1 text-[11px] text-base-content/50">
+                  cinzeldynamics.com/services/{route.slug}
+                </span>
+              </div>
+
+              <div className="max-h-[calc(100vh-12rem)] overflow-auto bg-base-100 p-2">
+                <ScaledPreview>
+                  <template.Component
+                    content={route.content}
+                    activeIndex={typeof activeTarget === 'number' ? activeTarget : null}
+                    onSelectItem={setActiveTarget}
+                    onDeleteItem={(i) => {
+                      removeArrayItem(setRoute, arrayField, i)
+                      setActiveTarget(null)
+                    }}
+                    activeField={typeof activeTarget === 'string' ? activeTarget : null}
+                    onSelectField={setActiveTarget}
+                  />
+                </ScaledPreview>
+              </div>
+            </Panel>
+          </div>
         </div>
-      </div>
+      )}
 
       {confirmDialog}
       {toastNode}
     </form>
+  )
+}
+
+function TemplatePicker({ value, onChange }) {
+  return (
+    <Panel icon="icon-[lucide--layers]" title="Template" bodyClassName="grid grid-cols-2 gap-2 p-4">
+      {SERVICE_TEMPLATES.map((t) => {
+        const selected = value === t.id
+        return (
+          <button
+            key={t.id}
+            type="button"
+            aria-pressed={selected}
+            onClick={() => onChange(t.id)}
+            className={`cursor-pointer rounded-lg border px-3 py-2.5 text-left transition ${
+              selected
+                ? 'border-base-content bg-base-200/60'
+                : 'border-base-300 hover:border-base-content/35 hover:bg-base-200/30'
+            }`}
+          >
+            <span className="flex items-center justify-between gap-2">
+              <span className="truncate text-sm font-bold text-base-content">{t.label}</span>
+              <span
+                className={`flex size-4 shrink-0 items-center justify-center rounded-full border ${
+                  selected ? 'border-base-content bg-base-content' : 'border-base-300'
+                }`}
+              >
+                {selected ? <span aria-hidden="true" className="icon-[lucide--check] size-2.5 text-base-100" /> : null}
+              </span>
+            </span>
+            <span className="mt-0.5 block truncate text-[11px] text-base-content/50">{t.hint}</span>
+          </button>
+        )
+      })}
+    </Panel>
+  )
+}
+
+function PreviewDialog({ route, onClose, children }) {
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8"
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') onClose()
+      }}
+    >
+      <button
+        type="button"
+        aria-label="Close preview"
+        onClick={onClose}
+        className="absolute inset-0 cursor-default bg-neutral/50"
+      />
+
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Page preview"
+        className="relative flex max-h-full w-full max-w-[1026px] flex-col overflow-hidden rounded-xl border border-base-300 bg-base-100 shadow-2xl"
+      >
+        <div className="flex items-center gap-2 border-b border-base-300 bg-base-200/40 px-4 py-2.5">
+          <span className="flex gap-1.5">
+            <span aria-hidden="true" className="size-2.5 rounded-full bg-base-300" />
+            <span aria-hidden="true" className="size-2.5 rounded-full bg-base-300" />
+            <span aria-hidden="true" className="size-2.5 rounded-full bg-base-300" />
+          </span>
+          <span className="font-mono ml-2 min-w-0 flex-1 truncate text-[11px] text-base-content/50">
+            cinzeldynamics.com/services/{route.slug}
+          </span>
+
+          {route.status === 'published' ? (
+            <a
+              href={`/services/${route.slug}`}
+              target="_blank"
+              rel="noreferrer"
+              className="flex shrink-0 items-center gap-1.5 text-[11px] font-semibold text-base-content/60 hover:text-base-content"
+            >
+              Open live
+              <span aria-hidden="true" className="icon-[lucide--external-link] size-3" />
+            </a>
+          ) : null}
+
+          <button
+            type="button"
+            autoFocus
+            onClick={onClose}
+            aria-label="Close preview"
+            className="flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-md text-base-content/50 transition hover:bg-base-200 hover:text-base-content"
+          >
+            <span aria-hidden="true" className="icon-[lucide--x] size-4" />
+          </button>
+        </div>
+
+        <div className="min-h-[60vh] overflow-auto">
+          <ScaledPreview>{children}</ScaledPreview>
+        </div>
+      </div>
+    </div>
   )
 }
 

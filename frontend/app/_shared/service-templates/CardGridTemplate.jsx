@@ -23,7 +23,7 @@ export default function CardGridTemplate({
 
   return (
     <article className="px-4 py-14 sm:px-8 sm:py-20 lg:px-16">
-      <div className="container mx-auto max-w-6xl">
+      <div className="container mx-auto max-w-7xl">
         <div className="grid gap-px overflow-hidden rounded-lg border border-base-200 bg-base-200 sm:grid-cols-2 lg:grid-cols-3">
           <header className="relative isolate flex flex-col justify-center overflow-hidden bg-base-100 p-6 sm:col-span-2 sm:p-8 lg:col-span-1">
             <ServiceHeroBackdrop />

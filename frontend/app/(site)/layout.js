@@ -1,6 +1,7 @@
 import { Geist_Mono, Cinzel,Open_Sans } from "next/font/google";
 import NavBar from "./Global-Compoents/NavBar";
 import ContactPopup from "./Global-Compoents/ContactPopup";
+import InlineScript from "./Global-Compoents/InlineScript";
 import "../globals.css";
 
 const geistMono = Geist_Mono({
@@ -106,7 +107,7 @@ export default function RootLayout({ children }) {
       className={`${geistMono.variable} ${cinzel.variable} ${openSans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+        <InlineScript html={THEME_INIT_SCRIPT} />
         <NavBar/>
         <main className="flex-1">
           {children}

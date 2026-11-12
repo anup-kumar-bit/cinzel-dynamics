@@ -125,7 +125,7 @@ class RouteIn(BaseModel):
     slug: str
     nav_name: str
     title: str
-    template: Literal["feature-split", "story", "card-grid"]
+    template: Literal["feature-split", "story", "card-grid", "custom"]
     content: dict = Field(default_factory=dict)
     status: Literal["draft", "published"] = "draft"
     sort_order: int = 0

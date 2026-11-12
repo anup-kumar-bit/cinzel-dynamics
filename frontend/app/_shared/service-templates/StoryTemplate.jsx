@@ -25,7 +25,7 @@ export default function StoryTemplate({
     <article>
       <header className="relative isolate overflow-hidden px-4 pt-14 pb-10 sm:px-8 sm:pt-20 sm:pb-14 lg:px-16">
         <ServiceHeroBackdrop />
-        <div className="container mx-auto grid max-w-5xl gap-8 lg:grid-cols-[minmax(0,1fr)_16rem] lg:gap-14">
+        <div className="container mx-auto grid max-w-7xl gap-8 lg:grid-cols-[minmax(0,1fr)_16rem] lg:gap-14">
           <div>
             {eyebrow ? (
               <EditableBlock index="eyebrow" label="eyebrow" active={activeField === 'eyebrow'} onSelect={onSelectField} className={fieldClass}>

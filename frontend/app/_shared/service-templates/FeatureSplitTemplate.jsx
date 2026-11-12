@@ -25,7 +25,7 @@ export default function FeatureSplitTemplate({
     <article>
       <header className="relative isolate overflow-hidden px-4 pt-14 pb-10 sm:px-8 sm:pt-20 sm:pb-14 lg:px-16">
         <ServiceHeroBackdrop />
-        <div className="container mx-auto max-w-6xl">
+        <div className="container mx-auto max-w-7xl">
           {eyebrow ? (
             <EditableBlock index="eyebrow" label="eyebrow" active={activeField === 'eyebrow'} onSelect={onSelectField} className={fieldClass}>
               <p className="font-mono text-[11px] font-semibold tracking-widest text-violet-600 uppercase dark:text-violet-400">

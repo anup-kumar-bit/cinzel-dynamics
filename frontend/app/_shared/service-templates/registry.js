@@ -1,6 +1,7 @@
 import FeatureSplitTemplate from './FeatureSplitTemplate'
 import StoryTemplate from './StoryTemplate'
 import CardGridTemplate from './CardGridTemplate'
+import BlankTemplate from './BlankTemplate'
 
 // defaultContent doubles as the mock: a new page renders as a finished layout
 // straight away, so the three options can be compared before any writing.
@@ -8,6 +9,7 @@ export const SERVICE_TEMPLATES = [
   {
     id: 'feature-split',
     label: 'Feature split',
+    hint: 'Lede + feature rows',
     description: 'Lede and figure side by side, then numbered feature rows.',
     Component: FeatureSplitTemplate,
     defaultContent: {
@@ -42,6 +44,7 @@ export const SERVICE_TEMPLATES = [
   {
     id: 'story',
     label: 'Story',
+    hint: 'Long-form sections',
     description: 'Long-form, numbered sections with a sticky rail — reads as a document.',
     Component: StoryTemplate,
     defaultContent: {
@@ -76,6 +79,7 @@ export const SERVICE_TEMPLATES = [
   {
     id: 'card-grid',
     label: 'Card grid',
+    hint: 'Icon card grid',
     description: 'Heading plus a grid of icon cards — good for a list of capabilities.',
     Component: CardGridTemplate,
     defaultContent: {
@@ -117,6 +121,14 @@ export const SERVICE_TEMPLATES = [
       ],
       cta: { label: 'See the mockups', href: '/portfolio' },
     },
+  },
+  {
+    id: 'custom',
+    label: 'Blank',
+    hint: 'Free-form editor',
+    description: 'Free-form HTML — no structure, just a page.',
+    Component: BlankTemplate,
+    defaultContent: { body: '' },
   },
 ]
 
