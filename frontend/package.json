@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@next/third-parties": "^16.2.12",
     "daisyui": "^5.7.4",
     "jsonwebtoken": "^9.0.3",
     "next": "16.2.12",

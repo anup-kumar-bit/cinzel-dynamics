@@ -1,7 +1,8 @@
-import { Geist_Mono, Cinzel,Open_Sans } from "next/font/google";
+import { Geist_Mono, Cinzel, Open_Sans } from "next/font/google";
 import NavBar from "./Global-Compoents/NavBar";
 import ContactPopup from "./Global-Compoents/ContactPopup";
 import InlineScript from "./Global-Compoents/InlineScript";
+import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 import "../globals.css";
 
 const geistMono = Geist_Mono({
@@ -107,12 +108,15 @@ export default function RootLayout({ children }) {
       className={`${geistMono.variable} ${cinzel.variable} ${openSans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <GoogleTagManager gtmId="GTM-KRG5QZBJ" />
+
         <InlineScript html={THEME_INIT_SCRIPT} />
-        <NavBar/>
+        <NavBar />
         <main className="flex-1">
           {children}
         </main>
-        <ContactPopup/>
+        <ContactPopup />
+        <GoogleAnalytics gaId="G-SVW6BGGXFD" />
       </body>
     </html>
   );
